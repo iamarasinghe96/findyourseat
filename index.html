@@ -2,285 +2,183 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Guvani & Indika - Find Your Seat</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Pacifico&family=Roboto&display=swap" rel="stylesheet" />
   <style>
-    body {
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+    * {
       margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background: url('https://images.unsplash.com/photo-1671600493594-edb52f00c6d7?q=80&w=977&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center fixed;
-      background-size: cover;
-      color: white;
-      text-align: center;
-      padding: 50px 20px;
+      padding: 0;
       box-sizing: border-box;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
     }
-
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      background-image: url('https://images.unsplash.com/photo-1470509037663-253afd7f0f5b?auto=format&fit=crop&w=1600&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+      z-index: 0;
+    }
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 40px 20px;
+      max-width: 600px;
+      margin: auto;
+    }
     h1 {
       font-family: 'Great Vibes', cursive;
-      font-size: 4rem;
-      margin-bottom: 0;
-      line-height: 1.2;
-      word-wrap: break-word;
+      font-size: 3rem;
+      margin-bottom: 10px;
+      color: #fff;
     }
-
-    h1 .homecoming {
-      display: block;
-      font-family: 'Pacifico', cursive;
-      font-size: 2.6rem;
-      margin: 10px 0;
-      letter-spacing: 4px;
-      color: #a10f18; /* deep red */
-      text-shadow: 0 0 8px rgba(161, 15, 24, 0.7);
-      word-wrap: break-word;
-    }
-
     h2 {
-      font-family: 'Pacifico', cursive;
-      font-size: 2rem;
-      font-weight: normal;
-      margin-top: 30px;
-      margin-bottom: 40px;
-      letter-spacing: 1.2px;
-      text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.7);
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      color: #a10f18;
     }
-
     input[type="text"] {
       width: 100%;
-      max-width: 400px;
-      padding: 15px;
-      font-size: 16px; /* explicit 16px to avoid zoom on mobile */
+      padding: 14px;
+      font-size: 1.2rem;
       border-radius: 5px;
       border: none;
       outline: none;
-      box-sizing: border-box;
+      margin-bottom: 10px;
     }
-
-    /* Info message with icon */
-    #info-tip {
-      display: none;
-      margin: 6px auto 20px;
-      max-width: 400px;
-      width: 90vw;
-      color: #f8f8f8;
-      font-size: 0.95rem;
-      font-family: 'Roboto', sans-serif;
-      text-align: left;
-      user-select: none;
-      opacity: 0.85;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 8px;
-    }
-
-    #info-tip svg {
-      width: 18px;
-      height: 18px;
-      fill: #a10f18;
-      flex-shrink: 0;
-    }
-
-    .results {
-      margin-top: 30px;
-      font-size: 1.1rem;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 20px;
-      border-radius: 8px;
-      display: none; /* hidden initially */
-      text-align: left;
-      max-width: 400px;
-      width: 90vw;
-      margin-left: auto;
-      margin-right: auto;
-      box-sizing: border-box;
-      word-wrap: break-word;
-    }
-
     .autocomplete-suggestions {
-      max-width: 400px;
-      width: 90vw;
-      margin: 0 auto;
-      background: white;
+      background-color: white;
       color: black;
       text-align: left;
       border-radius: 5px;
       overflow: hidden;
-      box-sizing: border-box;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      max-height: 200px;
+      overflow-y: auto;
     }
-
     .autocomplete-suggestions div {
       padding: 10px;
       cursor: pointer;
     }
-
     .autocomplete-suggestions div:hover {
-      background: #eee;
+      background-color: #eee;
+    }
+    #resultBox {
+      display: none;
+      background-color: rgba(0,0,0,0.6);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    #hint {
+      display: none;
+      font-size: 0.9rem;
+      color: #ddd;
+      margin-bottom: 10px;
+    }
+    .search-icon {
+      font-size: 20px;
+      margin-left: 8px;
+      vertical-align: middle;
+      color: #ccc;
     }
 
-    ul {
-      padding-left: 20px;
-      margin: 10px 0 0 0;
-    }
-
-    li {
-      list-style: disc;
-      margin-bottom: 5px;
-      word-wrap: break-word;
-    }
-
-    input, textarea, select, button {
-      touch-action: manipulation;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 480px) {
-      body {
-        padding: 30px 10px;
-      }
-
+    @media (max-width: 600px) {
       h1 {
-        font-size: 2.5rem;
+        font-size: 2.3rem;
       }
-
-      h1 .homecoming {
-        font-size: 1.8rem;
-        letter-spacing: 2px;
-        margin: 6px 0;
-      }
-
-      h2 {
-        font-size: 1.5rem;
-        margin-top: 20px;
-        margin-bottom: 30px;
-      }
-
       input[type="text"] {
-        font-size: 16px;
+        font-size: 1rem;
         padding: 12px;
       }
-
-      #info-tip {
-        font-size: 0.85rem;
-        margin-bottom: 15px;
-      }
-
-      .results {
+      #resultBox {
         font-size: 1rem;
-        padding: 15px;
-        max-width: 100%;
-        width: 100vw;
-      }
-
-      .autocomplete-suggestions {
-        max-width: 100%;
-        width: 100vw;
       }
     }
   </style>
 </head>
 <body>
-
-  <h1>
-    Guvani &amp; Indika
-    <span class="homecoming">Homecoming</span>
-  </h1>
-
-  <h2>Find your seat</h2>
-
-  <input type="text" id="searchBox" placeholder="Search your name..." autocomplete="off" />
-  
-  <div id="info-tip" aria-live="polite" role="alert">
-    <!-- info icon SVG -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <circle cx="12" cy="12" r="10" stroke="none" />
-      <rect x="11" y="10" width="2" height="6" fill="white"/>
-      <rect x="11" y="6" width="2" height="2" fill="white"/>
-    </svg>
-    Please select your name from the list below.
+  <div class="container">
+    <h1>Guvani & Indika</h1>
+    <h2>Find your seat</h2>
+    <input type="text" id="guestInput" placeholder="Search your name..." autocomplete="off" />
+    <span id="hint">🔍 Please select your name from the list</span>
+    <div class="autocomplete-suggestions" id="suggestions"></div>
+    <div id="resultBox">
+      <p><strong>Your table number is:</strong> <span id="tableNumber"></span></p>
+      <p><strong>You will be seated with:</strong></p>
+      <ul id="guestList"></ul>
+    </div>
   </div>
 
-  <div class="autocomplete-suggestions" id="suggestions"></div>
-  <div class="results" id="results"></div>
-
   <script>
-    const SHEETDB_API = 'https://sheetdb.io/api/v1/s40b3e26yad0v';
+    const guestInput = document.getElementById("guestInput");
+    const suggestionsBox = document.getElementById("suggestions");
+    const resultBox = document.getElementById("resultBox");
+    const tableNumberSpan = document.getElementById("tableNumber");
+    const guestList = document.getElementById("guestList");
+    const hint = document.getElementById("hint");
+
     let guests = [];
 
-    function normalizeName(name) {
-      return name.replace(/^(mr|mrs|ms|dr|prof)\.?\s+/i, '').trim().toLowerCase();
-    }
-
-    async function fetchGuestData() {
-      const response = await fetch(SHEETDB_API);
-      const data = await response.json();
-      guests = data.map(row => ({
-        name: row.Name.trim(),
-        table: row["Table Number"].trim()
-      }));
-    }
-
-    function showSuggestions(inputValue) {
-      const suggestions = document.getElementById('suggestions');
-      const infoTip = document.getElementById('info-tip');
-      suggestions.innerHTML = '';
-      if (!inputValue) {
-        infoTip.style.display = 'none';
-        return;
-      }
-
-      const matches = guests.filter(g =>
-        normalizeName(g.name).includes(normalizeName(inputValue))
-      );
-
-      matches.slice(0, 5).forEach(g => {
-        const div = document.createElement('div');
-        div.textContent = g.name;
-        div.onclick = () => selectName(g.name);
-        suggestions.appendChild(div);
+    fetch('https://sheetdb.io/api/v1/s40b3e26yad0v')
+      .then(response => response.json())
+      .then(data => {
+        guests = data.map(row => ({
+          name: row["Name"],
+          table: row["Table Number"]
+        }));
       });
 
-      if (matches.length > 0) {
-        infoTip.style.display = 'flex'; // show info with icon
-      } else {
-        infoTip.style.display = 'none';
-      }
-    }
+    guestInput.addEventListener("input", function() {
+      const value = guestInput.value.toLowerCase().replace(/^(dr\.|mrs\.|mr\.)\s*/i, "");
+      hint.style.display = value.length > 0 ? "block" : "none";
+      resultBox.style.display = "none";
+      suggestionsBox.innerHTML = "";
 
-    function selectName(name) {
-      const selected = guests.find(g => g.name === name);
-      if (!selected) return;
+      if (value.length === 0) return;
 
-      const tableGuests = guests
-        .filter(g => g.table === selected.table)
-        .map(g => g.name)
-        .filter(n => n !== name);
+      const filtered = guests.filter(g =>
+        g.name.toLowerCase().replace(/^(dr\.|mrs\.|mr\.)\s*/i, "").includes(value)
+      );
 
-      const resultsDiv = document.getElementById('results');
-      resultsDiv.innerHTML = `
-        <p><strong>${selected.name}</strong>, your table number is <strong>${selected.table}</strong>.</p>
-        ${tableGuests.length > 0 ? `<p>You will be seated with:</p><ul>${tableGuests.map(n => `<li>${n}</li>`).join('')}</ul>` : '<p>You are currently the only one at this table.</p>'}
-      `;
-      resultsDiv.style.display = 'inline-block';
-
-      document.getElementById('suggestions').innerHTML = '';
-      document.getElementById('info-tip').style.display = 'none';
-      document.getElementById('searchBox').value = name;
-    }
-
-    document.getElementById('searchBox').addEventListener('input', e => {
-      showSuggestions(e.target.value);
-      document.getElementById('results').style.display = 'none';
+      filtered.forEach(g => {
+        const div = document.createElement("div");
+        div.textContent = g.name;
+        div.addEventListener("click", () => {
+          guestInput.value = g.name;
+          showTable(g);
+          suggestionsBox.innerHTML = "";
+        });
+        suggestionsBox.appendChild(div);
+      });
     });
 
-    window.onload = fetchGuestData;
-  </script>
+    function showTable(selectedGuest) {
+      hint.style.display = "none";
+      const table = selectedGuest.table;
+      const others = guests
+        .filter(g => g.table === table && g.name !== selectedGuest.name)
+        .map(g => g.name);
 
+      tableNumberSpan.textContent = table;
+      guestList.innerHTML = "";
+      others.forEach(name => {
+        const li = document.createElement("li");
+        li.textContent = name;
+        guestList.appendChild(li);
+      });
+      resultBox.style.display = "block";
+    }
+  </script>
 </body>
 </html>
