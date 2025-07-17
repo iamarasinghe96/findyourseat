@@ -1,147 +1,131 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Guvani & Indika - Find Your Seat</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Find Your Seat - Guvani & Indika</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background: url('https://images.unsplash.com/photo-1582794543462-0d7922e50cf5?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center fixed;
-      background-size: cover;
-      color: white;
-      text-align: center;
-      padding: 50px 20px;
-    }
-
-    h1 {
-      font-family: 'Great Vibes', cursive;
-      font-size: 60px;
-      margin-bottom: 10px;
-    }
-
-    h2 {
-      font-size: 24px;
-      font-weight: 300;
-      margin-bottom: 40px;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      max-width: 400px;
-      padding: 15px;
-      font-size: 18px;
-      border-radius: 5px;
-      border: none;
-      outline: none;
-    }
-
-    .results {
-      margin-top: 30px;
-      font-size: 20px;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 20px;
-      border-radius: 8px;
-      display: inline-block;
-    }
-
-    .autocomplete-suggestions {
-      max-width: 400px;
-      margin: 0 auto;
-      background: white;
-      color: black;
-      text-align: left;
-      border-radius: 5px;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      position: relative;
+      min-height: 100vh;
       overflow: hidden;
     }
 
-    .autocomplete-suggestions div {
+    .background-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100%;
+      background-image: url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1950&q=80');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(40%);
+      z-index: -1;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      padding: 50px 20px;
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Brush Script MT', cursive;
+      font-size: 3em;
+      margin-bottom: 0;
+    }
+
+    h2 {
+      font-size: 1.5em;
+      margin-top: 5px;
+      font-weight: 300;
+    }
+
+    #searchBox {
+      margin-top: 40px;
       padding: 10px;
-      cursor: pointer;
+      width: 80%;
+      max-width: 400px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
     }
 
-    .autocomplete-suggestions div:hover {
-      background: #eee;
-    }
-
-    ul {
-      padding-left: 0;
-    }
-
-    li {
-      list-style: none;
+    #result {
+      margin-top: 30px;
+      font-size: 18px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 20px;
+      border-radius: 10px;
+      display: inline-block;
+      max-width: 90%;
+      word-wrap: break-word;
     }
   </style>
 </head>
 <body>
-
-  <h1>Guvani & Indika</h1>
-  <h2>Find your seat</h2>
-
-  <input type="text" id="searchBox" placeholder="Search your name..." autocomplete="off">
-  <div class="autocomplete-suggestions" id="suggestions"></div>
-  <div class="results" id="results"></div>
+  <div class="background-overlay"></div>
+  <div class="content">
+    <h1>Guvani & Indika</h1>
+    <h2>Find your seat</h2>
+    <input type="text" id="searchBox" placeholder="Search your name..." oninput="searchGuest()" list="guests" autocomplete="off" />
+    <datalist id="guests"></datalist>
+    <div id="result"></div>
+  </div>
 
   <script>
-    const SHEETDB_API = 'https://sheetdb.io/api/v1/s40b3e26yad0v';
-    let guests = [];
+    let guestsData = [];
 
-    function normalizeName(name) {
-      return name.replace(/^(mr|mrs|ms|dr|prof)\.?\s+/i, '').trim().toLowerCase();
-    }
-
-    async function fetchGuestData() {
-      const response = await fetch(SHEETDB_API);
+    async function fetchData() {
+      const response = await fetch('https://sheetdb.io/api/v1/s40b3e26yad0v');
       const data = await response.json();
-      guests = data.map(row => ({
-        name: row.Name.trim(),
-        table: row["Table Number"].trim()
-      }));
+      guestsData = data;
+      populateDatalist(data);
     }
 
-    function showSuggestions(inputValue) {
-      const suggestions = document.getElementById('suggestions');
-      suggestions.innerHTML = '';
-      if (!inputValue) return;
-
-      const matches = guests.filter(g =>
-        normalizeName(g.name).includes(normalizeName(inputValue))
-      );
-
-      matches.slice(0, 5).forEach(g => {
-        const div = document.createElement('div');
-        div.textContent = g.name;
-        div.onclick = () => selectName(g.name);
-        suggestions.appendChild(div);
+    function populateDatalist(data) {
+      const datalist = document.getElementById('guests');
+      datalist.innerHTML = "";
+      data.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item["Name"];
+        datalist.appendChild(option);
       });
     }
 
-    function selectName(name) {
-      const selected = guests.find(g => g.name === name);
-      if (!selected) return;
-
-      const tableGuests = guests
-        .filter(g => g.table === selected.table)
-        .map(g => g.name)
-        .filter(n => n !== name);
-
-      document.getElementById('results').innerHTML = `
-        <p><strong>${selected.name}</strong>, your table number is <strong>${selected.table}</strong>.</p>
-        ${tableGuests.length > 0 ? `<p>You will be seated with:</p><ul>${tableGuests.map(n => `<li>${n}</li>`).join('')}</ul>` : '<p>You are currently the only one at this table.</p>'}
-      `;
-
-      document.getElementById('suggestions').innerHTML = '';
-      document.getElementById('searchBox').value = name;
+    function normalizeName(name) {
+      return name.toLowerCase().replace(/^(dr\.?|mrs\.?|mr\.?)\s+/i, '').trim();
     }
 
-    document.getElementById('searchBox').addEventListener('input', e => {
-      showSuggestions(e.target.value);
-    });
+    function searchGuest() {
+      const inputRaw = document.getElementById('searchBox').value;
+      const input = normalizeName(inputRaw);
+      const guest = guestsData.find(g => normalizeName(g["Name"]) === input);
 
-    window.onload = fetchGuestData;
+      if (guest) {
+        const tableNumber = guest["Table Number"];
+        const tableMates = guestsData
+          .filter(g => g["Table Number"] === tableNumber)
+          .map(g => g["Name"])
+          .filter(name => normalizeName(name) !== input);
+
+        document.getElementById('result').innerHTML =
+          `<strong>Your table number is:</strong> ${tableNumber}<br><br>` +
+          (tableMates.length > 0
+            ? `<strong>You will be seated with:</strong><br>${tableMates.join(', ')}`
+            : `<strong>You are currently the only one at this table.</strong>`);
+      } else {
+        document.getElementById('result').innerHTML = "";
+      }
+    }
+
+    fetchData();
   </script>
-
 </body>
 </html>
