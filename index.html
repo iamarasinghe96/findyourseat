@@ -62,6 +62,31 @@
       box-sizing: border-box;
     }
 
+    /* Info message with icon */
+    #info-tip {
+      display: none;
+      margin: 6px auto 20px;
+      max-width: 400px;
+      width: 90vw;
+      color: #f8f8f8;
+      font-size: 0.95rem;
+      font-family: 'Roboto', sans-serif;
+      text-align: left;
+      user-select: none;
+      opacity: 0.85;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+    }
+
+    #info-tip svg {
+      width: 18px;
+      height: 18px;
+      fill: #a10f18;
+      flex-shrink: 0;
+    }
+
     .results {
       margin-top: 30px;
       font-size: 1.1rem;
@@ -141,6 +166,11 @@
         padding: 12px;
       }
 
+      #info-tip {
+        font-size: 0.85rem;
+        margin-bottom: 15px;
+      }
+
       .results {
         font-size: 1rem;
         padding: 15px;
@@ -165,6 +195,17 @@
   <h2>Find your seat</h2>
 
   <input type="text" id="searchBox" placeholder="Search your name..." autocomplete="off" />
+  
+  <div id="info-tip" aria-live="polite" role="alert">
+    <!-- info icon SVG -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="10" stroke="none" />
+      <rect x="11" y="10" width="2" height="6" fill="white"/>
+      <rect x="11" y="6" width="2" height="2" fill="white"/>
+    </svg>
+    Please select your name from the list below.
+  </div>
+
   <div class="autocomplete-suggestions" id="suggestions"></div>
   <div class="results" id="results"></div>
 
@@ -187,8 +228,12 @@
 
     function showSuggestions(inputValue) {
       const suggestions = document.getElementById('suggestions');
+      const infoTip = document.getElementById('info-tip');
       suggestions.innerHTML = '';
-      if (!inputValue) return;
+      if (!inputValue) {
+        infoTip.style.display = 'none';
+        return;
+      }
 
       const matches = guests.filter(g =>
         normalizeName(g.name).includes(normalizeName(inputValue))
@@ -200,6 +245,12 @@
         div.onclick = () => selectName(g.name);
         suggestions.appendChild(div);
       });
+
+      if (matches.length > 0) {
+        infoTip.style.display = 'flex'; // show info with icon
+      } else {
+        infoTip.style.display = 'none';
+      }
     }
 
     function selectName(name) {
@@ -216,15 +267,16 @@
         <p><strong>${selected.name}</strong>, your table number is <strong>${selected.table}</strong>.</p>
         ${tableGuests.length > 0 ? `<p>You will be seated with:</p><ul>${tableGuests.map(n => `<li>${n}</li>`).join('')}</ul>` : '<p>You are currently the only one at this table.</p>'}
       `;
-      resultsDiv.style.display = 'inline-block';  // Show after selection
+      resultsDiv.style.display = 'inline-block';
 
       document.getElementById('suggestions').innerHTML = '';
+      document.getElementById('info-tip').style.display = 'none';
       document.getElementById('searchBox').value = name;
     }
 
     document.getElementById('searchBox').addEventListener('input', e => {
       showSuggestions(e.target.value);
-      document.getElementById('results').style.display = 'none';  // Hide results while typing
+      document.getElementById('results').style.display = 'none';
     });
 
     window.onload = fetchGuestData;
