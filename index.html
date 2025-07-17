@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Guvani & Indika - Find Your Seat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: url('https://images.unsplash.com/photo-1505935428862-770b6f24f629?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 60px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 24px;
+      font-weight: 300;
+      margin-bottom: 40px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      max-width: 400px;
+      padding: 15px;
+      font-size: 18px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+    }
+
+    .results {
+      margin-top: 30px;
+      font-size: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    .autocomplete-suggestions {
+      max-width: 400px;
+      margin: 0 auto;
+      background: white;
+      color: black;
+      text-align: left;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .autocomplete-suggestions div {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .autocomplete-suggestions div:hover {
+      background: #eee;
+    }
+
+    ul {
+      padding-left: 0;
+    }
+
+    li {
+      list-style: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Guvani & Indika</h1>
+  <h2>Find your seat</h2>
+
+  <input type="text" id="searchBox" placeholder="Search your name..." autocomplete="off">
+  <div class="autocomplete-suggestions" id="suggestions"></div>
+  <div class="results" id="results"></div>
+
+  <script>
+    const SHEETDB_API = 'https://sheetdb.io/api/v1/s40b3e26yad0v';
+    let guests = [];
+
+    function normalizeName(name) {
+      return name.replace(/^(mr|mrs|ms|dr|prof)\.?\s+/i, '').trim().toLowerCase();
+    }
+
+    async function fetchGuestData() {
+      const response = await fetch(SHEETDB_API);
+      const data = await response.json();
+      guests = data.map(row => ({
+        name: row.Name.trim(),
+        table: row["Table Number"].trim()
+      }));
+    }
+
+    function showSuggestions(inputValue) {
+      const suggestions = document.getElementById('suggestions');
+      suggestions.innerHTML = '';
+      if (!inputValue) return;
+
+      const matches = guests.filter(g =>
+        normalizeName(g.name).includes(normalizeName(inputValue))
+      );
+
+      matches.slice(0, 5).forEach(g => {
+        const div = document.createElement('div');
+        div.textContent = g.name;
+        div.onclick = () => selectName(g.name);
+        suggestions.appendChild(div);
+      });
+    }
+
+    function selectName(name) {
+      const selected = guests.find(g => g.name === name);
+      if (!selected) return;
+
+      const tableGuests = guests
+        .filter(g => g.table === selected.table)
+        .map(g => g.name)
+        .filter(n => n !== name);
+
+      document.getElementById('results').innerHTML = `
+        <p><strong>${selected.name}</strong>, your table number is <strong>${selected.table}</strong>.</p>
+        ${tableGuests.length > 0 ? `<p>You will be seated with:</p><ul>${tableGuests.map(n => `<li>${n}</li>`).join('')}</ul>` : '<p>You are currently the only one at this table.</p>'}
+      `;
+
+      document.getElementById('suggestions').innerHTML = '';
+      document.getElementById('searchBox').value = name;
+    }
+
+    document.getElementById('searchBox').addEventListener('input', e => {
+      showSuggestions(e.target.value);
+    });
+
+    window.onload = fetchGuestData;
+  </script>
+
+</body>
+</html>
