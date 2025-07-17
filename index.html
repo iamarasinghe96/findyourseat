@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Guvani & Indika - Find Your Seat</title>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Pacifico&family=Roboto&display=swap" rel="stylesheet" />
   <style>
@@ -13,28 +14,36 @@
       color: white;
       text-align: center;
       padding: 50px 20px;
+      box-sizing: border-box;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
     }
 
     h1 {
       font-family: 'Great Vibes', cursive;
-      font-size: 60px;
+      font-size: 4rem;
       margin-bottom: 0;
       line-height: 1.2;
+      word-wrap: break-word;
     }
 
     h1 .homecoming {
       display: block;
       font-family: 'Pacifico', cursive;
-      font-size: 40px;
+      font-size: 2.6rem;
       margin: 10px 0;
       letter-spacing: 4px;
       color: #a10f18; /* deep red */
       text-shadow: 0 0 8px rgba(161, 15, 24, 0.7);
+      word-wrap: break-word;
     }
 
     h2 {
       font-family: 'Pacifico', cursive;
-      font-size: 32px;
+      font-size: 2rem;
       font-weight: normal;
       margin-top: 30px;
       margin-bottom: 40px;
@@ -46,33 +55,39 @@
       width: 100%;
       max-width: 400px;
       padding: 15px;
-      font-size: 18px;
+      font-size: 1.1rem;
       border-radius: 5px;
       border: none;
       outline: none;
+      box-sizing: border-box;
     }
 
     .results {
       margin-top: 30px;
-      font-size: 20px;
+      font-size: 1.1rem;
       background: rgba(0, 0, 0, 0.5);
       padding: 20px;
       border-radius: 8px;
       display: none; /* hidden initially */
       text-align: left;
       max-width: 400px;
+      width: 90vw;
       margin-left: auto;
       margin-right: auto;
+      box-sizing: border-box;
+      word-wrap: break-word;
     }
 
     .autocomplete-suggestions {
       max-width: 400px;
+      width: 90vw;
       margin: 0 auto;
       background: white;
       color: black;
       text-align: left;
       border-radius: 5px;
       overflow: hidden;
+      box-sizing: border-box;
     }
 
     .autocomplete-suggestions div {
@@ -92,6 +107,47 @@
     li {
       list-style: disc;
       margin-bottom: 5px;
+      word-wrap: break-word;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      body {
+        padding: 30px 10px;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      h1 .homecoming {
+        font-size: 1.8rem;
+        letter-spacing: 2px;
+        margin: 6px 0;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+        margin-top: 20px;
+        margin-bottom: 30px;
+      }
+
+      input[type="text"] {
+        font-size: 1rem;
+        padding: 12px;
+      }
+
+      .results {
+        font-size: 1rem;
+        padding: 15px;
+        max-width: 100%;
+        width: 100vw;
+      }
+
+      .autocomplete-suggestions {
+        max-width: 100%;
+        width: 100vw;
+      }
     }
   </style>
 </head>
