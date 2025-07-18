@@ -291,10 +291,20 @@
         .filter(n => n !== name);
 
       const resultsDiv = document.getElementById('results');
-      resultsDiv.innerHTML = `
-        <p><strong>${selected.name}</strong>, your table number is <strong>${selected.table}</strong>.</p>
-        ${tableGuests.length > 0 ? `<p>You will be seated with:</p><ul>${tableGuests.map(n => `<li>${n}</li>`).join('')}</ul>` : '<p>You are currently the only one at this table.</p>'}
-      `;
+
+      let message = `<p><strong>${selected.name}</strong>, your table number is <strong>${selected.table}</strong>.</p>`;
+      if (tableGuests.length > 0) {
+        message += `<p>You will be seated with:</p><ul>${tableGuests.map(n => `<li>${n}</li>`).join('')}</ul>`;
+      } else {
+        message += `<p>You are currently the only one at this table.</p>`;
+      }
+
+      // Add floor plan link for Mr. Selaka Jayawardana
+      if (selected.name.toLowerCase().trim() === 'mr. selaka jayawardana') {
+        message += `<p><a href="https://drive.google.com/file/d/1LuKZII9na--NLaAxEpOsz2Tw7_Bgfy7i/view?usp=drive_link" target="_blank" style="color: #ffdf66; text-decoration: underline;">Click here to view the table arrangment.</a></p>`;
+      }
+
+      resultsDiv.innerHTML = message;
       resultsDiv.style.display = 'inline-block';
 
       document.getElementById('suggestions').innerHTML = '';
