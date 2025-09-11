@@ -1,345 +1,623 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Guvani & Indika - Find Your Seat</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Pacifico&family=Roboto&display=swap" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy Birthday — Guvani</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: 'Roboto', sans-serif;
-      color: white;
-      text-align: center;
-      padding: 50px 20px;
-      box-sizing: border-box;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      position: relative;
-      z-index: 1;
-      overflow-x: hidden;
+    :root{
+      --pink1:#ffdde1;
+      --pink2:#ee9ca7;
+      --accent:#ff6b81;
+      --accent-dark:#d6336c;
+      --card:#fff4f6;
+      --glass: rgba(255,255,255,0.9);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg,var(--pink1),var(--pink2));
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow:hidden;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-      background: url('https://images.unsplash.com/photo-1671600493594-edb52f00c6d7?q=80&w=977&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center;
-      background-size: cover;
-      z-index: -1;
-      pointer-events: none;
+    /* Main card */
+    .card {
+      width:100%;
+      max-width:920px;
+      background:var(--glass);
+      border-radius:18px;
+      padding:20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.14);
+      position:relative;
+      overflow:visible;
+    }
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      flex-direction:column;
+    }
+    header h1{
+      margin:8px 0 0;
+      font-size:1.9rem;
+      color:var(--accent-dark);
+      letter-spacing:0.4px;
+    }
+    header p.sub{
+      margin:0;
+      color:#8c3a4b;
+      font-weight:500;
+      opacity:0.95;
     }
 
-    h1 {
-      font-family: 'Great Vibes', cursive;
-      font-size: 4rem;
-      margin-bottom: 0;
-      line-height: 1.2;
-      word-wrap: break-word;
+    /* Quote area */
+    .quote-wrap{
+      margin:18px auto 6px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:88px;
+      padding:16px;
+      background:var(--card);
+      border-radius:12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      position:relative;
+      overflow:hidden;
+    }
+    .quote{
+      font-size:1.05rem;
+      line-height:1.4;
+      color:#402232;
+      opacity:0;
+      transform: translateY(18px);
+      transition:opacity 600ms ease, transform 600ms ease;
+      text-align:center;
+    }
+    .quote.show{
+      opacity:1;
+      transform: translateY(0);
     }
 
-    h1 .homecoming {
-      display: block;
-      font-family: 'Pacifico', cursive;
-      font-size: 2.6rem;
-      margin: 10px 0;
-      letter-spacing: 4px;
-      color: #a10f18;
-      text-shadow: 0 0 8px rgba(161, 15, 24, 0.7);
-      word-wrap: break-word;
+    /* cake surprise button */
+    .cake-wrap{
+      display:flex;
+      justify-content:center;
+      margin-top:14px;
+    }
+    .cake-btn{
+      --size:86px;
+      height:var(--size);
+      min-width:var(--size);
+      padding:12px 20px;
+      border-radius:999px;
+      background:linear-gradient(180deg,#ffd3a3,#ffb347);
+      border:none;
+      box-shadow:0 8px 24px rgba(0,0,0,0.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      color:#722a12;
+      font-weight:700;
+      font-size:1.05rem;
+      cursor:pointer;
+      position:relative;
+      transition:transform .18s ease, box-shadow .18s;
+    }
+    .cake-btn:active{ transform:translateY(2px) scale(.995); }
+    .cake-btn .cake-emoji{
+      font-size:1.45rem;
+      margin-right:6px;
+    }
+    .cake-btn .label{
+      display:block;
+      transform:translateY(2px);
     }
 
-    h2 {
-      font-family: 'Pacifico', cursive;
-      font-size: 2rem;
-      font-weight: normal;
-      margin-top: 30px;
-      margin-bottom: 40px;
-      letter-spacing: 1.2px;
-      text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.7);
+    /* gifts grid */
+    .gifts{
+      margin-top:20px;
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+      align-items:stretch;
+      padding-bottom:12px;
+    }
+    .gift-btn{
+      background: linear-gradient(180deg,#ff9db1,#ff6b81);
+      border:none;
+      color:white;
+      font-weight:600;
+      padding:18px;
+      border-radius:14px;
+      font-size:1rem;
+      box-shadow: 0 8px 20px rgba(214,51,76,0.2);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      cursor:pointer;
+      transition:transform .18s;
+    }
+    .gift-btn:active{ transform:translateY(3px); }
+    .gift-btn .emoji{ font-size:1.6rem; }
+    .gift-btn .label{ font-size:0.95rem; }
+
+    /* Gift result area (image reveal) */
+    .result{
+      margin-top:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:120px;
+    }
+    .result img{
+      max-width:260px;
+      border-radius:12px;
+      box-shadow:0 12px 30px rgba(0,0,0,0.2);
+      transform:scale(.92);
+      opacity:0;
+      transition:opacity .4s ease, transform .45s cubic-bezier(.2,.9,.3,1);
+    }
+    .result img.show{
+      opacity:1;
+      transform:scale(1);
     }
 
-    .search-wrapper {
-      position: relative;
-      width: 100%;
-      max-width: 400px;
+    /* modal / riddle panel */
+    .modal {
+      position:fixed;
+      left:0; top:0; right:0; bottom:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(10,6,8,0.45);
+      z-index:30;
+      padding:16px;
+    }
+    .panel{
+      width:100%;
+      max-width:480px;
+      background:white;
+      border-radius:12px;
+      padding:18px;
+      box-shadow:0 18px 40px rgba(0,0,0,0.35);
+      text-align:center;
+    }
+    .panel h3{ margin:6px 0 10px; color:#2b1a22; }
+    .panel p.hint{ margin:8px 0 14px; color:#8a3a4a; }
+    .panel input{
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid #f0c9cf;
+      font-size:1rem;
+      margin-bottom:10px;
+    }
+    .panel .actions{ display:flex; gap:10px; justify-content:center; margin-top:8px; flex-wrap:wrap; }
+    .btn{
+      padding:10px 14px;
+      border-radius:10px;
+      border:none;
+      cursor:pointer;
+      font-weight:600;
+      background:var(--accent);
+      color:white;
+    }
+    .btn.ghost{ background:transparent; color:#652935; border:1px solid #f0c9cf; }
+
+    /* responsive */
+    @media (max-width:520px){
+      .gifts{ grid-template-columns:repeat(2,1fr); gap:10px; }
+      .card{ padding:14px; border-radius:12px; }
+      .quote-wrap{ min-height:76px; padding:12px; }
+      header h1{ font-size:1.5rem; }
+      .cake-btn{ --size:72px; font-size:.95rem; padding:12px; }
+      .gift-btn{ padding:14px; font-size:.94rem; border-radius:12px; }
+      .result img{ max-width:200px; }
     }
 
-    .search-wrapper input[type="text"] {
-      width: 100%;
-      padding: 15px 40px 15px 15px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: none;
-      outline: none;
-      box-sizing: border-box;
+    /* confetti canvas covers behind card */
+    #confettiCanvas{
+      position:fixed;
+      left:0;top:0;
+      width:100vw;height:100vh;
+      pointer-events:none;
+      z-index:8;
+    }
+    /* flying emojis container */
+    .emoji-fly{ position:fixed; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:25; }
+    .fly {
+      position:absolute;
+      font-size:22px;
+      transform: translateY(0) rotate(0);
+      animation: floatUp linear forwards;
+      opacity:0;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity:1; }
+      100% { transform: translateY(-120vh) scale(1.2); opacity:0; }
     }
 
-    .clear-icon {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 18px;
-      cursor: pointer;
-      color: #aaa;
-      background: white;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      line-height: 18px;
-      text-align: center;
-      display: none;
-    }
-
-    #info-tip {
-      display: none;
-      margin: 6px auto 20px;
-      max-width: 400px;
-      width: 90vw;
-      color: #f8f8f8;
-      font-size: 0.95rem;
-      font-family: 'Roboto', sans-serif;
-      text-align: left;
-      user-select: none;
-      opacity: 0.85;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 8px;
-    }
-
-    #info-tip svg {
-      width: 18px;
-      height: 18px;
-      fill: #a10f18;
-      flex-shrink: 0;
-    }
-
-    .results {
-      margin-top: 30px;
-      font-size: 1.1rem;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 20px;
-      border-radius: 8px;
-      display: none;
-      text-align: left;
-      max-width: 400px;
-      width: 90vw;
-      margin-left: auto;
-      margin-right: auto;
-      box-sizing: border-box;
-      word-wrap: break-word;
-    }
-
-    .autocomplete-suggestions {
-      max-width: 400px;
-      width: 90vw;
-      margin: 0 auto;
-      background: white;
-      color: black;
-      text-align: left;
-      border-radius: 5px;
-      overflow: hidden;
-      box-sizing: border-box;
-    }
-
-    .autocomplete-suggestions div {
-      padding: 10px;
-      cursor: pointer;
-    }
-
-    .autocomplete-suggestions div:hover {
-      background: #eee;
-    }
-
-    ul {
-      padding-left: 20px;
-      margin: 10px 0 0 0;
-    }
-
-    li {
-      list-style: disc;
-      margin-bottom: 5px;
-      word-wrap: break-word;
-    }
-
-    input, textarea, select, button {
-      touch-action: manipulation;
-    }
-
-    @media (max-width: 480px) {
-      body {
-        padding: 30px 10px;
-      }
-
-      h1 {
-        font-size: 2.5rem;
-      }
-
-      h1 .homecoming {
-        font-size: 1.8rem;
-        letter-spacing: 2px;
-        margin: 6px 0;
-      }
-
-      h2 {
-        font-size: 1.5rem;
-        margin-top: 20px;
-        margin-bottom: 30px;
-      }
-
-      .search-wrapper input[type="text"] {
-        font-size: 16px;
-        padding: 12px 35px 12px 12px;
-      }
-
-      .clear-icon {
-        font-size: 16px;
-        right: 10px;
-      }
-
-      #info-tip {
-        font-size: 0.85rem;
-        margin-bottom: 15px;
-      }
-
-      .results {
-        font-size: 1rem;
-        padding: 15px;
-        max-width: 100%;
-        width: 100vw;
-      }
-
-      .autocomplete-suggestions {
-        max-width: 100%;
-        width: 100vw;
-      }
-    }
   </style>
 </head>
 <body>
+  <canvas id="confettiCanvas"></canvas>
+  <div class="emoji-fly" id="emojiFly"></div>
 
-  <h1>
-    Guvani &amp; Indika
-    <span class="homecoming">Homecoming</span>
-  </h1>
+  <div class="card" role="main" aria-labelledby="title">
+    <header>
+      <p class="sub">For my beautiful wife —</p>
+      <h1 id="title">Happy Birthday, Guvani 🎉</h1>
+      <p class="sub" style="font-size:0.92rem">This page is made with love ❤️</p>
+    </header>
 
-  <h2>Find your seat</h2>
+    <!-- Quote area -->
+    <div class="quote-wrap" aria-live="polite">
+      <div id="quote" class="quote"></div>
+    </div>
 
-  <div class="search-wrapper">
-    <input type="text" id="searchBox" placeholder="Search your name..." autocomplete="off" />
-    <span id="clearBtn" class="clear-icon" title="Clear">&times;</span>
+    <!-- Birthday reveal and cake button -->
+    <div class="cake-wrap" style="justify-content:center;">
+      <button id="cakeBtn" class="cake-btn" aria-label="Reveal surprise (cake button)">
+        <span class="cake-emoji">🎂</span>
+        <span class="label">Click for Surprise</span>
+      </button>
+    </div>
+
+    <!-- Gifts grid (hidden until cake clicked) -->
+    <section id="giftsSection" class="gifts" style="display:none; margin-top:18px;">
+      <button class="gift-btn" data-key="beanie" aria-label="Gift beanie">
+        <div class="emoji">🎁</div><div class="label">Gift 1</div>
+      </button>
+
+      <button class="gift-btn" data-key="tumbler" aria-label="Gift tumbler">
+        <div class="emoji">🎀</div><div class="label">Gift 2</div>
+      </button>
+
+      <button class="gift-btn" data-key="mask" aria-label="Gift eye mask">
+        <div class="emoji">🧸</div><div class="label">Gift 3</div>
+      </button>
+
+      <button class="gift-btn" data-key="voucher" aria-label="Gift voucher">
+        <div class="emoji">🍭</div><div class="label">Gift 4</div>
+      </button>
+    </section>
+
+    <!-- result area -->
+    <div class="result" id="resultArea" aria-live="polite"></div>
   </div>
 
-  <div id="info-tip" aria-live="polite" role="alert">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="12" r="10" stroke="none" />
-      <rect x="11" y="10" width="2" height="6" fill="white"/>
-      <rect x="11" y="6" width="2" height="2" fill="white"/>
-    </svg>
-    Please select your name from the list below.
-  </div>
-
-  <div class="autocomplete-suggestions" id="suggestions"></div>
-  <div class="results" id="results"></div>
+  <!-- Modal container (injected) -->
+  <div id="modalRoot"></div>
 
   <script>
-    const SHEETDB_API = 'https://sheetdb.io/api/v1/s40b3e26yad0v';
-    let guests = [];
+    /* ----------------------------
+       Quotes logic (auto-advance)
+       ---------------------------- */
+    const quotes = [
+      "When you came into my life, everything changed — you lit up my world.",
+      "You make ordinary days feel like a celebration. Your smile brightens every moment.",
+      "I love the way you laugh, how you care, and how you stand by me — all of it means everything.",
+      "Together we've started a beautiful chapter — this first birthday as husband & wife is just the beginning.",
+      "Thank you for being patient, kind, playful, and my safe place. I cherish you.",
+      "May your day be filled with all the warmth and joy you give to everyone around you.",
+      "Happy Birthday, my beautiful wife — Guvani. I'm grateful for you, today and always."
+    ];
+    const quoteEl = document.getElementById('quote');
+    let qIndex = 0;
 
-    function normalizeName(name) {
-      return name.replace(/^(mr|mrs|ms|dr|prof)\\.?\\s+/i, '').trim().toLowerCase();
+    function showQuote(i) {
+      quoteEl.classList.remove('show');
+      // small pause to trigger transition
+      setTimeout(() => {
+        quoteEl.textContent = quotes[i] || '';
+        quoteEl.classList.add('show');
+      }, 180);
     }
 
-    async function fetchGuestData() {
-      const response = await fetch(SHEETDB_API);
-      const data = await response.json();
-      guests = data.map(row => ({
-        name: row.Name.trim(),
-        table: row["Table Number"].trim()
-      }));
-    }
-
-    function showSuggestions(inputValue) {
-      const suggestions = document.getElementById('suggestions');
-      const infoTip = document.getElementById('info-tip');
-      const clearBtn = document.getElementById('clearBtn');
-
-      suggestions.innerHTML = '';
-
-      if (!inputValue) {
-        infoTip.style.display = 'none';
-        clearBtn.style.display = 'none';
-        return;
-      }
-
-      clearBtn.style.display = 'inline';
-
-      const matches = guests.filter(g =>
-        normalizeName(g.name).includes(normalizeName(inputValue))
-      );
-
-      matches.slice(0, 5).forEach(g => {
-        const div = document.createElement('div');
-        div.textContent = g.name;
-        div.onclick = () => selectName(g.name);
-        suggestions.appendChild(div);
-      });
-
-      infoTip.style.display = matches.length > 0 ? 'flex' : 'none';
-    }
-
-    function selectName(name) {
-      const selected = guests.find(g => g.name === name);
-      if (!selected) return;
-
-      const tableGuests = guests
-        .filter(g => g.table === selected.table)
-        .map(g => g.name)
-        .filter(n => n !== name);
-
-      const resultsDiv = document.getElementById('results');
-
-      let message = `<p><strong>${selected.name}</strong>, your table number is <strong>${selected.table}</strong>.</p>`;
-
-      if (tableGuests.length > 0) {
-        message += `<p>You will be seated with:</p><ul>${tableGuests.map(n => `<li>${n}</li>`).join('')}</ul>`;
+    function nextQuote() {
+      if (qIndex < quotes.length) {
+        showQuote(qIndex);
+        // variable delay: ~110ms per character, clamp between 2500 and 8000ms
+        const len = quotes[qIndex].length;
+        const delay = Math.max(2500, Math.min(8000, Math.round(len * 110)));
+        qIndex++;
+        setTimeout(nextQuote, delay + 650); // extra for fade animation
       } else {
-        message += `<p>You are currently the only one at this table.</p>`;
+        // All quotes done — keep last message visible and lightly pulse the cake
+        quoteEl.textContent = "Ready for a surprise? 🎁 Tap the cake!";
+        quoteEl.classList.add('show');
+        pulseCake();
+        startConfetti(); // gently start confetti
+        startEmojiSpawning(); // start mild emoji drift
       }
-
-      message += `<p><a href="https://drive.google.com/file/d/1Ba8TRdHLNhS6CfGIXyZDVLNYND_Ky_RL/view?usp=sharing" style="color: #ffdf66; text-decoration: underline;">Click here to view the floor plan</a></p>`;
-
-      resultsDiv.innerHTML = message;
-      resultsDiv.style.display = 'inline-block';
-
-      document.getElementById('suggestions').innerHTML = '';
-      document.getElementById('info-tip').style.display = 'none';
-      document.getElementById('searchBox').value = name;
     }
 
-    document.getElementById('searchBox').addEventListener('input', e => {
-      showSuggestions(e.target.value);
-      document.getElementById('results').style.display = 'none';
+    // Kick off quotes
+    nextQuote();
+
+    /* ----------------------------
+       Cake button / reveal
+       ---------------------------- */
+    const cakeBtn = document.getElementById('cakeBtn');
+    const giftsSection = document.getElementById('giftsSection');
+    const resultArea = document.getElementById('resultArea');
+
+    function pulseCake(){
+      cakeBtn.animate([
+        { transform: 'scale(1)' },
+        { transform: 'scale(1.06)' },
+        { transform: 'scale(1)' }
+      ], { duration: 1400, iterations: 3 });
+    }
+
+    cakeBtn.addEventListener('click', () => {
+      // reveal gifts section
+      giftsSection.style.display = 'grid';
+      // remove any earlier result
+      resultArea.innerHTML = '';
+      // create a stronger emoji burst
+      spawnEmojisBurst(14);
+      // activate confetti stronger
+      startConfetti(true);
+      // scroll into view (mobile)
+      setTimeout(() => {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      }, 200);
     });
 
-    document.getElementById('clearBtn').addEventListener('click', () => {
-      document.getElementById('searchBox').value = '';
-      document.getElementById('suggestions').innerHTML = '';
-      document.getElementById('results').style.display = 'none';
-      document.getElementById('info-tip').style.display = 'none';
-      document.getElementById('clearBtn').style.display = 'none';
-      document.getElementById('searchBox').focus();
+    /* ----------------------------
+       Gifts and riddles
+       ---------------------------- */
+    const gifts = {
+      beanie: {
+        title: "Beanie (for headaches)",
+        riddle: "Riddle: What's the most hated thing that comes into your head and makes it throb?",
+        answers: ["headache","headaches","a headache"],
+        hints: [
+          "It throbs and makes you reach for medicine.",
+          "It often starts with 'head...'",
+          "You say 'I have a ____' when it hurts."
+        ],
+        img: "https://bigdeals.lk/uploads/product/normal/6925912107019n.webp"
+      },
+      tumbler: {
+        title: "Tumbler Cup",
+        riddle: "Riddle: I’m a doll, blonde and pink — everyone wanted to play with me. Who am I?",
+        answers: ["barbie","barbie doll"],
+        hints: [
+          "She wears pink and has a Dreamhouse.",
+          "A famous doll with a popular brand name.",
+          "Think pink, heels, and a tiny convertible."
+        ],
+        img: "https://miniso-bh.com/wp-content/uploads/2023/11/2015030910104_1.jpg"
+      },
+      mask: {
+        title: "Eye Mask",
+        riddle: "Riddle: I block the light so you can sleep tight — what am I?",
+        answers: ["eye mask","mask","sleep mask"],
+        hints: [
+          "You strap me over your eyes at night.",
+          "I keep out light so naps are peaceful.",
+          "Two words: 'eye' + '___'."
+        ],
+        img: "https://f.fcdn.app/imgs/1245d8/www.minisouruguay.com.uy/miniuy/dbe5/webp/catalogo/69580855732136958085573213CG1/600x600/mascara-de-ojos-animales-conejito-gris.jpg"
+      },
+      voucher: {
+        title: "Street Burger Voucher",
+        riddle: "Riddle: It's a food place you love but rarely go because it's pricey — name it.",
+        answers: ["street burger","streetburger","street burger voucher","street burger voucher"],
+        hints: [
+          "It’s a burger place you love but say it's expensive.",
+          "Two-word name, first word is 'Street'.",
+          "Think 'Street' + a classic sandwich."
+        ],
+        img: "https://drive.google.com/uc?export=view&id=1s6vwTufo7OYGsU0Mxh2WDUtynfG51k9H"
+      }
+    };
+
+    // attach click handlers
+    document.querySelectorAll('.gift-btn').forEach(btn=>{
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.key;
+        openRiddleModal(key);
+      });
     });
 
-    window.onload = fetchGuestData;
+    // Modal system
+    const modalRoot = document.getElementById('modalRoot');
+    function openRiddleModal(key){
+      const item = gifts[key];
+      let attempts = 0;
+      modalRoot.innerHTML = `
+        <div class="modal" role="dialog" aria-modal="true">
+          <div class="panel">
+            <h3>${item.title}</h3>
+            <p class="hint">${item.riddle}</p>
+            <input id="answerInput" placeholder="Type your answer here" aria-label="Answer input" />
+            <div class="hint" id="hintText"></div>
+            <div class="actions">
+              <button id="submitBtn" class="btn">Check Answer</button>
+              <button id="cancelBtn" class="btn ghost">Cancel</button>
+            </div>
+          </div>
+        </div>
+      `;
+      const answerInput = document.getElementById('answerInput');
+      const submitBtn = document.getElementById('submitBtn');
+      const cancelBtn = document.getElementById('cancelBtn');
+      const hintText = document.getElementById('hintText');
+      answerInput.focus();
+
+      function check(){
+        const val = (answerInput.value || '').trim().toLowerCase();
+        attempts++;
+        // Accept if any answer matches (case-insensitive)
+        if ( item.answers.some(a => val === a || val.includes(a)) ){
+          closeModal();
+          revealGiftImage(item.img);
+        } else {
+          // show a progressive hint
+          const hintIdx = Math.min(attempts-1, item.hints.length-1);
+          hintText.textContent = "Hint: " + item.hints[hintIdx];
+          // after final hint, if still wrong encourage another try
+          if (attempts >= item.hints.length + 2) {
+            hintText.textContent = "Still stuck? Try the keywords from the hint, or type the exact word.";
+          }
+        }
+      }
+
+      submitBtn.addEventListener('click', check);
+      answerInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ check(); }});
+      cancelBtn.addEventListener('click', closeModal);
+
+      function closeModal(){
+        modalRoot.innerHTML = '';
+      }
+    }
+
+    // reveal gift image, then auto-hide after 10s and return to gifts
+    let revealTimer = null;
+    function revealGiftImage(url){
+      // clear previous
+      if (revealTimer) { clearTimeout(revealTimer); revealTimer = null; }
+      resultArea.innerHTML = `<img src="${url}" alt="Gift" id="giftImg" />`;
+      const img = document.getElementById('giftImg');
+      // ensure image animates in
+      setTimeout(()=> img.classList.add('show'), 80);
+      // hide gifts grid while showing result
+      giftsSection.style.opacity = '0.12';
+      giftsSection.style.pointerEvents = 'none';
+
+      // after 10s, remove image and restore gifts
+      revealTimer = setTimeout(()=>{
+        if(img) img.classList.remove('show');
+        setTimeout(()=>{
+          resultArea.innerHTML = '';
+          giftsSection.style.opacity = '1';
+          giftsSection.style.pointerEvents = 'auto';
+        }, 450);
+      }, 10000);
+    }
+
+    /* ----------------------------
+       Confetti implementation
+       - if stronger = true, more pieces & brighter speed
+       ---------------------------- */
+    let confettiAnim = null;
+    function startConfetti(stronger=false){
+      const canvas = document.getElementById('confettiCanvas');
+      const ctx = canvas.getContext('2d');
+      const DPR = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * DPR;
+      canvas.height = window.innerHeight * DPR;
+      canvas.style.width = window.innerWidth + 'px';
+      canvas.style.height = window.innerHeight + 'px';
+      ctx.scale(DPR, DPR);
+
+      const count = stronger ? 180 : 90;
+      const pieces = Array.from({length:count}).map(()=>({
+        x: Math.random()*window.innerWidth,
+        y: Math.random()*window.innerHeight - window.innerHeight,
+        r: (Math.random()*6)+4,
+        d: (Math.random()*2) + (stronger ? 1.5 : 0.5),
+        tilt: (Math.random()*10)-5,
+        color: `hsl(${Math.random()*360},90%,60%)`,
+        rot: Math.random()*360,
+        speedX: (Math.random()-0.5)*1.2
+      }));
+      if(confettiAnim) { cancelAnimationFrame(confettiAnim); confettiAnim = null; }
+      function render(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        for(let p of pieces){
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot * Math.PI/180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.r/2, -p.r/2 + p.tilt, p.r, p.r*0.6);
+          ctx.restore();
+
+          p.y += p.d;
+          p.x += p.speedX;
+          p.rot += 2 + Math.random()*2;
+          if(p.y > window.innerHeight + 20){ p.y = -30; p.x = Math.random()*window.innerWidth; }
+          if(p.x < -50) p.x = window.innerWidth + 50;
+          if(p.x > window.innerWidth + 50) p.x = -50;
+        }
+        confettiAnim = requestAnimationFrame(render);
+      }
+      render();
+
+      // auto-stop after 9s for subtlety
+      setTimeout(()=>{ if(confettiAnim){ cancelAnimationFrame(confettiAnim); confettiAnim = null; ctx.clearRect(0,0,canvas.width,canvas.height); } }, stronger ? 10000 : 9000);
+    }
+
+    /* ----------------------------
+       Emoji floating functions
+       ---------------------------- */
+    const emojiContainer = document.getElementById('emojiFly');
+    const emojiList = ["🎂","🎈","❤️","✨","🎁","🥳"];
+    let emojiInterval = null;
+
+    function spawnOneEmoji(){
+      const el = document.createElement('div');
+      el.className = 'fly';
+      el.textContent = emojiList[Math.floor(Math.random()*emojiList.length)];
+      const size = 14 + Math.random()*26;
+      el.style.fontSize = size + 'px';
+      el.style.left = (5 + Math.random()*90) + 'vw';
+      el.style.bottom = '-6vh';
+      el.style.animationDuration = (3 + Math.random()*4) + 's';
+      el.style.opacity = '1';
+      emojiContainer.appendChild(el);
+      setTimeout(()=> el.remove(), 8500);
+    }
+
+    function startEmojiSpawning(){
+      if(emojiInterval) return;
+      emojiInterval = setInterval(spawnOneEmoji, 900);
+    }
+
+    function spawnEmojisBurst(count=12){
+      for(let i=0;i<count;i++){
+        setTimeout(spawnOneEmoji, i*90);
+      }
+    }
+
+    /* ----------------------------
+       Accessibility & small fixes
+       ---------------------------- */
+    // Stop animations when page hidden
+    document.addEventListener('visibilitychange', () => {
+      if(document.hidden){
+        if(confettiAnim) cancelAnimationFrame(confettiAnim);
+        if(emojiInterval){ clearInterval(emojiInterval); emojiInterval = null; }
+      } else {
+        // continue gentle emoji spawn again
+        startEmojiSpawning();
+      }
+    });
+
+    // make sure canvas resizes on orientation change
+    window.addEventListener('resize', () => {
+      // clear confetti (let startConfetti be called when needed)
+      const c = document.getElementById('confettiCanvas');
+      if(c){ const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); }
+    });
+
+    // initial subtle confetti & emoji spawn after quotes finished automatically within nextQuote flow
   </script>
-
 </body>
 </html>
