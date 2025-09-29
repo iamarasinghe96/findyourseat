@@ -1,3 +1,10 @@
-git add index.html indika_amarasinghe_contact.vcf
-git commit -m "Add portfolio site with contact card"
-git push
+BEGIN:VCARD
+VERSION:3.0
+N:Amarasinghe;Indika;;;
+FN:Indika Amarasinghe
+ORG:Job Applicant
+ADR:;;Colombo;Sri Lanka;;;;
+TEL;CELL:+94777351292
+EMAIL;WORK;INTERNET:iamarasinghe96@gmail.com
+URL:https://www.linkedin.com/in/indika96/
+END:VCARD
