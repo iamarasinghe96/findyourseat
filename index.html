@@ -1,623 +1,365 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Happy Birthday — Guvani</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --pink1:#ffdde1;
-      --pink2:#ee9ca7;
-      --accent:#ff6b81;
-      --accent-dark:#d6336c;
-      --card:#fff4f6;
-      --glass: rgba(255,255,255,0.9);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg,var(--pink1),var(--pink2));
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      overflow:hidden;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* Main card */
-    .card {
-      width:100%;
-      max-width:920px;
-      background:var(--glass);
-      border-radius:18px;
-      padding:20px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.14);
-      position:relative;
-      overflow:visible;
-    }
-    header{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:12px;
-      flex-direction:column;
-    }
-    header h1{
-      margin:8px 0 0;
-      font-size:1.9rem;
-      color:var(--accent-dark);
-      letter-spacing:0.4px;
-    }
-    header p.sub{
-      margin:0;
-      color:#8c3a4b;
-      font-weight:500;
-      opacity:0.95;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #1f2937;
+        }
 
-    /* Quote area */
-    .quote-wrap{
-      margin:18px auto 6px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      min-height:88px;
-      padding:16px;
-      background:var(--card);
-      border-radius:12px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-      position:relative;
-      overflow:hidden;
-    }
-    .quote{
-      font-size:1.05rem;
-      line-height:1.4;
-      color:#402232;
-      opacity:0;
-      transform: translateY(18px);
-      transition:opacity 600ms ease, transform 600ms ease;
-      text-align:center;
-    }
-    .quote.show{
-      opacity:1;
-      transform: translateY(0);
-    }
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin: 20px 0;
+        }
 
-    /* cake surprise button */
-    .cake-wrap{
-      display:flex;
-      justify-content:center;
-      margin-top:14px;
-    }
-    .cake-btn{
-      --size:86px;
-      height:var(--size);
-      min-width:var(--size);
-      padding:12px 20px;
-      border-radius:999px;
-      background:linear-gradient(180deg,#ffd3a3,#ffb347);
-      border:none;
-      box-shadow:0 8px 24px rgba(0,0,0,0.18);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      color:#722a12;
-      font-weight:700;
-      font-size:1.05rem;
-      cursor:pointer;
-      position:relative;
-      transition:transform .18s ease, box-shadow .18s;
-    }
-    .cake-btn:active{ transform:translateY(2px) scale(.995); }
-    .cake-btn .cake-emoji{
-      font-size:1.45rem;
-      margin-right:6px;
-    }
-    .cake-btn .label{
-      display:block;
-      transform:translateY(2px);
-    }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
 
-    /* gifts grid */
-    .gifts{
-      margin-top:20px;
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:14px;
-      align-items:stretch;
-      padding-bottom:12px;
-    }
-    .gift-btn{
-      background: linear-gradient(180deg,#ff9db1,#ff6b81);
-      border:none;
-      color:white;
-      font-weight:600;
-      padding:18px;
-      border-radius:14px;
-      font-size:1rem;
-      box-shadow: 0 8px 20px rgba(214,51,76,0.2);
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      cursor:pointer;
-      transition:transform .18s;
-    }
-    .gift-btn:active{ transform:translateY(3px); }
-    .gift-btn .emoji{ font-size:1.6rem; }
-    .gift-btn .label{ font-size:0.95rem; }
+        .name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
 
-    /* Gift result area (image reveal) */
-    .result{
-      margin-top:16px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      min-height:120px;
-    }
-    .result img{
-      max-width:260px;
-      border-radius:12px;
-      box-shadow:0 12px 30px rgba(0,0,0,0.2);
-      transform:scale(.92);
-      opacity:0;
-      transition:opacity .4s ease, transform .45s cubic-bezier(.2,.9,.3,1);
-    }
-    .result img.show{
-      opacity:1;
-      transform:scale(1);
-    }
+        .tagline {
+            font-size: 1.1rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
 
-    /* modal / riddle panel */
-    .modal {
-      position:fixed;
-      left:0; top:0; right:0; bottom:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background: rgba(10,6,8,0.45);
-      z-index:30;
-      padding:16px;
-    }
-    .panel{
-      width:100%;
-      max-width:480px;
-      background:white;
-      border-radius:12px;
-      padding:18px;
-      box-shadow:0 18px 40px rgba(0,0,0,0.35);
-      text-align:center;
-    }
-    .panel h3{ margin:6px 0 10px; color:#2b1a22; }
-    .panel p.hint{ margin:8px 0 14px; color:#8a3a4a; }
-    .panel input{
-      width:100%;
-      padding:12px 14px;
-      border-radius:10px;
-      border:1px solid #f0c9cf;
-      font-size:1rem;
-      margin-bottom:10px;
-    }
-    .panel .actions{ display:flex; gap:10px; justify-content:center; margin-top:8px; flex-wrap:wrap; }
-    .btn{
-      padding:10px 14px;
-      border-radius:10px;
-      border:none;
-      cursor:pointer;
-      font-weight:600;
-      background:var(--accent);
-      color:white;
-    }
-    .btn.ghost{ background:transparent; color:#652935; border:1px solid #f0c9cf; }
+        .content {
+            padding: 30px;
+        }
 
-    /* responsive */
-    @media (max-width:520px){
-      .gifts{ grid-template-columns:repeat(2,1fr); gap:10px; }
-      .card{ padding:14px; border-radius:12px; }
-      .quote-wrap{ min-height:76px; padding:12px; }
-      header h1{ font-size:1.5rem; }
-      .cake-btn{ --size:72px; font-size:.95rem; padding:12px; }
-      .gift-btn{ padding:14px; font-size:.94rem; border-radius:12px; }
-      .result img{ max-width:200px; }
-    }
+        .contact-section {
+            margin-bottom: 30px;
+        }
 
-    /* confetti canvas covers behind card */
-    #confettiCanvas{
-      position:fixed;
-      left:0;top:0;
-      width:100vw;height:100vh;
-      pointer-events:none;
-      z-index:8;
-    }
-    /* flying emojis container */
-    .emoji-fly{ position:fixed; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:25; }
-    .fly {
-      position:absolute;
-      font-size:22px;
-      transform: translateY(0) rotate(0);
-      animation: floatUp linear forwards;
-      opacity:0;
-    }
-    @keyframes floatUp {
-      0% { transform: translateY(0) scale(1); opacity:1; }
-      100% { transform: translateY(-120vh) scale(1.2); opacity:0; }
-    }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #374151;
+        }
 
-  </style>
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 8px 0;
+        }
+
+        .contact-item svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            fill: #6b7280;
+        }
+
+        .contact-item a {
+            text-decoration: none;
+            color: #374151;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item a:hover {
+            color: #2563eb;
+        }
+
+        .buttons-section {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-button svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            fill: currentColor;
+        }
+
+        .call-btn {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        }
+
+        .call-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+        }
+
+        .cv-btn {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        }
+
+        .cv-btn:hover {
+            background: linear-gradient(135deg, #047857 0%, #059669 100%);
+        }
+
+        .email-btn {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+        }
+
+        .email-btn:hover {
+            background: linear-gradient(135deg, #c2410c 0%, #ea580c 100%);
+        }
+
+        .linkedin-btn {
+            background: linear-gradient(135deg, #0077b5 0%, #0e76a8 100%);
+        }
+
+        .linkedin-btn:hover {
+            background: linear-gradient(135deg, #005885 0%, #0077b5 100%);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+            font-size: 0.9rem;
+            background: rgba(243, 244, 246, 0.5);
+        }
+
+        @media (min-width: 768px) {
+            .buttons-section {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .container {
+                max-width: 600px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 10px 0;
+                border-radius: 12px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .name {
+                font-size: 1.8rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <canvas id="confettiCanvas"></canvas>
-  <div class="emoji-fly" id="emojiFly"></div>
-
-  <div class="card" role="main" aria-labelledby="title">
-    <header>
-      <p class="sub">For my beautiful wife —</p>
-      <h1 id="title">Happy Birthday, Guvani 🎉</h1>
-      <p class="sub" style="font-size:0.92rem">This page is made with love ❤️</p>
-    </header>
-
-    <!-- Quote area -->
-    <div class="quote-wrap" aria-live="polite">
-      <div id="quote" class="quote"></div>
-    </div>
-
-    <!-- Birthday reveal and cake button -->
-    <div class="cake-wrap" style="justify-content:center;">
-      <button id="cakeBtn" class="cake-btn" aria-label="Reveal surprise (cake button)">
-        <span class="cake-emoji">🎂</span>
-        <span class="label">Click for Surprise</span>
-      </button>
-    </div>
-
-    <!-- Gifts grid (hidden until cake clicked) -->
-    <section id="giftsSection" class="gifts" style="display:none; margin-top:18px;">
-      <button class="gift-btn" data-key="beanie" aria-label="Gift beanie">
-        <div class="emoji">🎁</div><div class="label">Gift 1</div>
-      </button>
-
-      <button class="gift-btn" data-key="tumbler" aria-label="Gift tumbler">
-        <div class="emoji">🎀</div><div class="label">Gift 2</div>
-      </button>
-
-      <button class="gift-btn" data-key="mask" aria-label="Gift eye mask">
-        <div class="emoji">🧸</div><div class="label">Gift 3</div>
-      </button>
-
-      <button class="gift-btn" data-key="voucher" aria-label="Gift voucher">
-        <div class="emoji">🍭</div><div class="label">Gift 4</div>
-      </button>
-    </section>
-
-    <!-- result area -->
-    <div class="result" id="resultArea" aria-live="polite"></div>
-  </div>
-
-  <!-- Modal container (injected) -->
-  <div id="modalRoot"></div>
-
-  <script>
-    /* ----------------------------
-       Quotes logic (auto-advance)
-       ---------------------------- */
-    const quotes = [
-      "When you came into my life, everything changed — you lit up my world.",
-      "You make ordinary days feel like a celebration. Your smile brightens every moment.",
-      "I love the way you laugh, how you care, and how you stand by me — all of it means everything.",
-      "Together we've started a beautiful chapter — this first birthday as husband & wife is just the beginning.",
-      "Thank you for being patient, kind, playful, and my safe place. I cherish you.",
-      "May your day be filled with all the warmth and joy you give to everyone around you.",
-      "Happy Birthday, my beautiful wife — Guvani. I'm grateful for you, today and always."
-    ];
-    const quoteEl = document.getElementById('quote');
-    let qIndex = 0;
-
-    function showQuote(i) {
-      quoteEl.classList.remove('show');
-      // small pause to trigger transition
-      setTimeout(() => {
-        quoteEl.textContent = quotes[i] || '';
-        quoteEl.classList.add('show');
-      }, 180);
-    }
-
-    function nextQuote() {
-      if (qIndex < quotes.length) {
-        showQuote(qIndex);
-        // variable delay: ~110ms per character, clamp between 2500 and 8000ms
-        const len = quotes[qIndex].length;
-        const delay = Math.max(2500, Math.min(8000, Math.round(len * 110)));
-        qIndex++;
-        setTimeout(nextQuote, delay + 650); // extra for fade animation
-      } else {
-        // All quotes done — keep last message visible and lightly pulse the cake
-        quoteEl.textContent = "Ready for a surprise? 🎁 Tap the cake!";
-        quoteEl.classList.add('show');
-        pulseCake();
-        startConfetti(); // gently start confetti
-        startEmojiSpawning(); // start mild emoji drift
-      }
-    }
-
-    // Kick off quotes
-    nextQuote();
-
-    /* ----------------------------
-       Cake button / reveal
-       ---------------------------- */
-    const cakeBtn = document.getElementById('cakeBtn');
-    const giftsSection = document.getElementById('giftsSection');
-    const resultArea = document.getElementById('resultArea');
-
-    function pulseCake(){
-      cakeBtn.animate([
-        { transform: 'scale(1)' },
-        { transform: 'scale(1.06)' },
-        { transform: 'scale(1)' }
-      ], { duration: 1400, iterations: 3 });
-    }
-
-    cakeBtn.addEventListener('click', () => {
-      // reveal gifts section
-      giftsSection.style.display = 'grid';
-      // remove any earlier result
-      resultArea.innerHTML = '';
-      // create a stronger emoji burst
-      spawnEmojisBurst(14);
-      // activate confetti stronger
-      startConfetti(true);
-      // scroll into view (mobile)
-      setTimeout(() => {
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-      }, 200);
-    });
-
-    /* ----------------------------
-       Gifts and riddles
-       ---------------------------- */
-    const gifts = {
-      beanie: {
-        title: "Gift 1",
-        riddle: "Riddle: What's the most hated thing that comes into your head and makes it throb?",
-        answers: ["headache","headaches","a headache"],
-        hints: [
-          "It throbs and makes you reach for medicine.",
-          "It often starts with 'head...'",
-          "You say 'I have a ____' when it hurts."
-        ],
-        img: "https://bigdeals.lk/uploads/product/normal/6925912107019n.webp"
-      },
-      tumbler: {
-        title: "Gift 2",
-        riddle: "Riddle: I’m a doll, blonde and pink — everyone wanted to play with me. Who am I?",
-        answers: ["barbie","barbie doll"],
-        hints: [
-          "She wears pink and has a Dreamhouse.",
-          "A famous doll with a popular brand name.",
-          "Think pink, heels, and a tiny convertible."
-        ],
-        img: "https://miniso-bh.com/wp-content/uploads/2023/11/2015030910104_1.jpg"
-      },
-      mask: {
-        title: "Gift 3",
-        riddle: "Riddle: I block the light so you can sleep tight — what am I?",
-        answers: ["eye mask","mask","sleep mask"],
-        hints: [
-          "You strap me over your eyes at night.",
-          "I keep out light so naps are peaceful.",
-          "Two words: 'eye' + '___'."
-        ],
-        img: "https://f.fcdn.app/imgs/1245d8/www.minisouruguay.com.uy/miniuy/dbe5/webp/catalogo/69580855732136958085573213CG1/600x600/mascara-de-ojos-animales-conejito-gris.jpg"
-      },
-      voucher: {
-        title: "Gift 4",
-        riddle: "Riddle: It's a food place you love but rarely go because it's pricey — name it.",
-        answers: ["street burger","streetburger","street burger voucher","street burger voucher"],
-        hints: [
-          "It’s a burger place you love but say it's expensive.",
-          "Two-word name, first word is 'Street'.",
-          "Think 'Street' + a classic sandwich."
-        ],
-        img: "https://drive.google.com/uc?export=view&id=1s6vwTufo7OYGsU0Mxh2WDUtynfG51k9H"
-      }
-    };
-
-    // attach click handlers
-    document.querySelectorAll('.gift-btn').forEach(btn=>{
-      btn.addEventListener('click', () => {
-        const key = btn.dataset.key;
-        openRiddleModal(key);
-      });
-    });
-
-    // Modal system
-    const modalRoot = document.getElementById('modalRoot');
-    function openRiddleModal(key){
-      const item = gifts[key];
-      let attempts = 0;
-      modalRoot.innerHTML = `
-        <div class="modal" role="dialog" aria-modal="true">
-          <div class="panel">
-            <h3>${item.title}</h3>
-            <p class="hint">${item.riddle}</p>
-            <input id="answerInput" placeholder="Type your answer here" aria-label="Answer input" />
-            <div class="hint" id="hintText"></div>
-            <div class="actions">
-              <button id="submitBtn" class="btn">Check Answer</button>
-              <button id="cancelBtn" class="btn ghost">Cancel</button>
-            </div>
-          </div>
+    <div class="container">
+        <div class="header">
+            <h1 class="name">Loading...</h1>
+            <p class="tagline">Loading...</p>
         </div>
-      `;
-      const answerInput = document.getElementById('answerInput');
-      const submitBtn = document.getElementById('submitBtn');
-      const cancelBtn = document.getElementById('cancelBtn');
-      const hintText = document.getElementById('hintText');
-      answerInput.focus();
+        
+        <div class="content">
+            <div class="contact-section">
+                <h2 class="section-title">Contact Information</h2>
+                
+                <div class="contact-item">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                    <span>Loading...</span>
+                </div>
+                
+                <div class="contact-item">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                    </svg>
+                    <a href="#">Loading...</a>
+                </div>
+                
+                <div class="contact-item">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                    </svg>
+                    <a href="#">Loading...</a>
+                </div>
+            </div>
+            
+            <div class="buttons-section">
+                <a href="#" onclick="saveContactCard(); return false;" class="action-button call-btn">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M12,12L16,16H13.5V19H10.5V16H8L12,12Z"/>
+                    </svg>
+                    Save Contact Card
+                </a>
+                
+                <a href="#" target="_blank" class="action-button cv-btn">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                    </svg>
+                    Download CV
+                </a>
+                
+                <a href="#" class="action-button email-btn" onclick="sendEmail()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                    </svg>
+                    Send Email
+                </a>
+                
+                <a href="#" target="_blank" class="action-button linkedin-btn">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 3A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19M18.5 18.5V13.2A3.26 3.26 0 0 0 15.24 9.94C14.39 9.94 13.4 10.46 12.92 11.24V10.13H10.13V18.5H12.92V13.57C12.92 12.8 13.54 12.17 14.31 12.17A1.4 1.4 0 0 1 15.71 13.57V18.5H18.5M6.88 8.56A1.68 1.68 0 0 0 8.56 6.88C8.56 5.95 7.81 5.19 6.88 5.19A1.69 1.69 0 0 0 5.19 6.88C5.19 7.81 5.95 8.56 6.88 8.56M8.27 18.5V10.13H5.5V18.5H8.27Z"/>
+                    </svg>
+                    View LinkedIn
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>&copy; 2025 Loading...</p>
+    </div>
 
-      function check(){
-        const val = (answerInput.value || '').trim().toLowerCase();
-        attempts++;
-        // Accept if any answer matches (case-insensitive)
-        if ( item.answers.some(a => val === a || val.includes(a)) ){
-          closeModal();
-          revealGiftImage(item.img);
-        } else {
-          // show a progressive hint
-          const hintIdx = Math.min(attempts-1, item.hints.length-1);
-          hintText.textContent = "Hint: " + item.hints[hintIdx];
-          // after final hint, if still wrong encourage another try
-          if (attempts >= item.hints.length + 2) {
-            hintText.textContent = "Still stuck? Try the keywords from the hint, or type the exact word.";
-          }
+    <script>
+        // ========================================
+        // CONFIGURATION - EDIT THESE VALUES EASILY
+        // ========================================
+        const CONFIG = {
+            // Personal Information
+            name: 'Indika Amarasinghe',
+            tagline: 'Software Engineer | Technology Enthusiast',
+            address: 'Colombo, Sri Lanka',
+            phone: '+94777351292',
+            phoneDisplay: '+94 77 735 1292',
+            email: 'iamarasinghe96@gmail.com',
+            
+            // Links (replace with your actual URLs)
+            cvUrl: 'https://drive.google.com/file/d/your-cv-file-id/view',
+            linkedinUrl: 'https://linkedin.com/in/your-profile',
+            
+            // Contact Card Information
+            company: 'Job applicant'
+        };
+
+        // ========================================
+        // FUNCTIONALITY
+        // ========================================
+        
+        function sendEmail() {
+            const subject = 'Opportunity with [Your Company]';
+            const mailtoLink = `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}`;
+            window.location.href = mailtoLink;
         }
-      }
 
-      submitBtn.addEventListener('click', check);
-      answerInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ check(); }});
-      cancelBtn.addEventListener('click', closeModal);
+        function saveContactCard() {
+            // Generate vCard format
+            const vCard = [
+                'BEGIN:VCARD',
+                'VERSION:3.0',
+                `FN:${CONFIG.name}`,
+                `N:${CONFIG.name.split(' ').reverse().join(';')};;;`,
+                `TEL;TYPE=CELL:${CONFIG.phone}`,
+                `EMAIL:${CONFIG.email}`,
+                `ORG:${CONFIG.company}`,
+                `ADR:;;${CONFIG.address};;;;`,
+                'END:VCARD'
+            ].join('\n');
 
-      function closeModal(){
-        modalRoot.innerHTML = '';
-      }
-    }
-
-    // reveal gift image, then auto-hide after 10s and return to gifts
-    let revealTimer = null;
-    function revealGiftImage(url){
-      // clear previous
-      if (revealTimer) { clearTimeout(revealTimer); revealTimer = null; }
-      resultArea.innerHTML = `<img src="${url}" alt="Gift" id="giftImg" />`;
-      const img = document.getElementById('giftImg');
-      // ensure image animates in
-      setTimeout(()=> img.classList.add('show'), 80);
-      // hide gifts grid while showing result
-      giftsSection.style.opacity = '0.12';
-      giftsSection.style.pointerEvents = 'none';
-
-      // after 10s, remove image and restore gifts
-      revealTimer = setTimeout(()=>{
-        if(img) img.classList.remove('show');
-        setTimeout(()=>{
-          resultArea.innerHTML = '';
-          giftsSection.style.opacity = '1';
-          giftsSection.style.pointerEvents = 'auto';
-        }, 450);
-      }, 10000);
-    }
-
-    /* ----------------------------
-       Confetti implementation
-       - if stronger = true, more pieces & brighter speed
-       ---------------------------- */
-    let confettiAnim = null;
-    function startConfetti(stronger=false){
-      const canvas = document.getElementById('confettiCanvas');
-      const ctx = canvas.getContext('2d');
-      const DPR = window.devicePixelRatio || 1;
-      canvas.width = window.innerWidth * DPR;
-      canvas.height = window.innerHeight * DPR;
-      canvas.style.width = window.innerWidth + 'px';
-      canvas.style.height = window.innerHeight + 'px';
-      ctx.scale(DPR, DPR);
-
-      const count = stronger ? 180 : 90;
-      const pieces = Array.from({length:count}).map(()=>({
-        x: Math.random()*window.innerWidth,
-        y: Math.random()*window.innerHeight - window.innerHeight,
-        r: (Math.random()*6)+4,
-        d: (Math.random()*2) + (stronger ? 1.5 : 0.5),
-        tilt: (Math.random()*10)-5,
-        color: `hsl(${Math.random()*360},90%,60%)`,
-        rot: Math.random()*360,
-        speedX: (Math.random()-0.5)*1.2
-      }));
-      if(confettiAnim) { cancelAnimationFrame(confettiAnim); confettiAnim = null; }
-      function render(){
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        for(let p of pieces){
-          ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.rotate(p.rot * Math.PI/180);
-          ctx.fillStyle = p.color;
-          ctx.fillRect(-p.r/2, -p.r/2 + p.tilt, p.r, p.r*0.6);
-          ctx.restore();
-
-          p.y += p.d;
-          p.x += p.speedX;
-          p.rot += 2 + Math.random()*2;
-          if(p.y > window.innerHeight + 20){ p.y = -30; p.x = Math.random()*window.innerWidth; }
-          if(p.x < -50) p.x = window.innerWidth + 50;
-          if(p.x > window.innerWidth + 50) p.x = -50;
+            // Create downloadable vCard file
+            const blob = new Blob([vCard], { type: 'text/vcard' });
+            const url = window.URL.createObjectURL(blob);
+            
+            // Create temporary download link
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${CONFIG.name.replace(/\s+/g, '_')}_contact.vcf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
         }
-        confettiAnim = requestAnimationFrame(render);
-      }
-      render();
 
-      // auto-stop after 9s for subtlety
-      setTimeout(()=>{ if(confettiAnim){ cancelAnimationFrame(confettiAnim); confettiAnim = null; ctx.clearRect(0,0,canvas.width,canvas.height); } }, stronger ? 10000 : 9000);
-    }
-
-    /* ----------------------------
-       Emoji floating functions
-       ---------------------------- */
-    const emojiContainer = document.getElementById('emojiFly');
-    const emojiList = ["🎂","🎈","❤️","✨","🎁","🥳"];
-    let emojiInterval = null;
-
-    function spawnOneEmoji(){
-      const el = document.createElement('div');
-      el.className = 'fly';
-      el.textContent = emojiList[Math.floor(Math.random()*emojiList.length)];
-      const size = 14 + Math.random()*26;
-      el.style.fontSize = size + 'px';
-      el.style.left = (5 + Math.random()*90) + 'vw';
-      el.style.bottom = '-6vh';
-      el.style.animationDuration = (3 + Math.random()*4) + 's';
-      el.style.opacity = '1';
-      emojiContainer.appendChild(el);
-      setTimeout(()=> el.remove(), 8500);
-    }
-
-    function startEmojiSpawning(){
-      if(emojiInterval) return;
-      emojiInterval = setInterval(spawnOneEmoji, 900);
-    }
-
-    function spawnEmojisBurst(count=12){
-      for(let i=0;i<count;i++){
-        setTimeout(spawnOneEmoji, i*90);
-      }
-    }
-
-    /* ----------------------------
-       Accessibility & small fixes
-       ---------------------------- */
-    // Stop animations when page hidden
-    document.addEventListener('visibilitychange', () => {
-      if(document.hidden){
-        if(confettiAnim) cancelAnimationFrame(confettiAnim);
-        if(emojiInterval){ clearInterval(emojiInterval); emojiInterval = null; }
-      } else {
-        // continue gentle emoji spawn again
-        startEmojiSpawning();
-      }
-    });
-
-    // make sure canvas resizes on orientation change
-    window.addEventListener('resize', () => {
-      // clear confetti (let startConfetti be called when needed)
-      const c = document.getElementById('confettiCanvas');
-      if(c){ const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); }
-    });
-
-    // initial subtle confetti & emoji spawn after quotes finished automatically within nextQuote flow
-  </script>
+        // Initialize page with configuration data
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update page title
+            document.title = `${CONFIG.name} - Portfolio`;
+            
+            // Update header
+            document.querySelector('.name').textContent = CONFIG.name;
+            document.querySelector('.tagline').textContent = CONFIG.tagline;
+            
+            // Update contact information
+            const contactItems = document.querySelectorAll('.contact-item');
+            contactItems[0].querySelector('span').textContent = CONFIG.address;
+            contactItems[1].querySelector('a').textContent = CONFIG.phoneDisplay;
+            contactItems[1].querySelector('a').href = `tel:${CONFIG.phone}`;
+            contactItems[2].querySelector('a').textContent = CONFIG.email;
+            contactItems[2].querySelector('a').href = `mailto:${CONFIG.email}`;
+            
+            // Update buttons
+            document.querySelector('.cv-btn').href = CONFIG.cvUrl;
+            document.querySelector('.linkedin-btn').href = CONFIG.linkedinUrl;
+            
+            // Update footer
+            document.querySelector('.footer p').textContent = `© 2025 ${CONFIG.name}. All rights reserved.`;
+            
+            // Add click animation to buttons
+            const buttons = document.querySelectorAll('.action-button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
