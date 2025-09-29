@@ -292,8 +292,8 @@
         const CONFIG = {
             // Personal Information
             name: 'Indika Amarasinghe',
-            tagline: 'Project Manager | Technology Enthusiast',
-            address: 'Colombo, Sri Lanka',
+            tagline: 'Project Manager',
+            address: '3/370 Townsend Street, Albury, NSW 2640',
             phone: '+94777351292',
             phoneDisplay: '+94 77 735 1292',
             email: 'iamarasinghe96@gmail.com',
@@ -313,7 +313,19 @@
         
         function sendEmail() {
             const subject = 'Following up on opportunities';
-            const mailtoLink = `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}`;
+            const body = `Hello Indika,
+
+My name is [Your Name], and I'm [Recruiter Position/Company].
+I'm reaching out regarding potential opportunities that might be a fit for you.
+
+You can contact me at:
+
+📞 Phone: +61[Your Phone Number]
+
+Looking forward to connecting!
+
+Best regards,`;
+            const mailtoLink = `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             window.location.href = mailtoLink;
         }
 
@@ -333,11 +345,18 @@
                 return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
             };
             
+            // Generate unique ID and timestamp for the event
+            const uid = Date.now() + '@portfolio-indika-amarasinghe.com';
+            const dtstamp = formatDate(new Date());
+            
             const icsContent = [
                 'BEGIN:VCALENDAR',
                 'VERSION:2.0',
                 'PRODID:-//Indika Amarasinghe//Portfolio//EN',
+                'METHOD:PUBLISH',
                 'BEGIN:VEVENT',
+                `UID:${uid}`,
+                `DTSTAMP:${dtstamp}`,
                 `DTSTART:${formatDate(startDate)}`,
                 `DTEND:${formatDate(endDate)}`,
                 'SUMMARY:Connect with Indika (Job applicant)',
