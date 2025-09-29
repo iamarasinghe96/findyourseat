@@ -273,18 +273,19 @@
         const CONFIG = {
             // Personal Information
             name: 'Indika Amarasinghe',
-            tagline: 'Project Manager | Technology Enthusiast',
-            address: '3/370 Townsend Street, Albury, NSW 2640, Australia',
+            tagline: 'Software Engineer | Technology Enthusiast',
+            address: 'Colombo, Sri Lanka',
             phone: '+94777351292',
             phoneDisplay: '+94 77 735 1292',
             email: 'iamarasinghe96@gmail.com',
             
             // Links (replace with your actual URLs)
-            cvUrl: 'https://drive.google.com/file/d/1jjsh9zieTN9NIeq2gD5QRDLk0AAqmpB7/view?usp=sharing',
+            cvUrl: 'https://drive.google.com/file/d/your-cv-file-id/view',
             linkedinUrl: 'https://www.linkedin.com/in/indika96/',
             
             // Contact Card Information
-            company: 'Job Applicant'
+            company: 'Job Applicant',
+            vcfFile: 'indika_amarasinghe_contact.vcf'
         };
 
         // ========================================
@@ -298,23 +299,8 @@
         }
 
         function saveContactCard() {
-            // Use the specific vCard format provided
-            const vCard = `BEGIN:VCARD
-VERSION:3.0
-N:Amarasinghe;Indika
-FN:Indika Amarasinghe
-ORG:Job Applicant
-ADR:;;3/370 Townsend Street;Albury;NSW;2640;Australia
-TEL;WORK;VOICE:
-TEL;CELL:+94777351292
-TEL;FAX:
-EMAIL;WORK;INTERNET:iamarasinghe96@gmail.com
-URL:
-END:VCARD`;
-            
-            // Create data URL and open it
-            const dataUrl = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vCard);
-            window.open(dataUrl, '_blank');
+            // Link directly to the hosted .vcf file for better mobile compatibility
+            window.location.href = CONFIG.vcfFile;
         }
 
         // Initialize page with configuration data
