@@ -274,7 +274,7 @@
             // Personal Information
             name: 'Indika Amarasinghe',
             tagline: 'Software Engineer | Technology Enthusiast',
-            address: 'Colombo, Sri Lanka',
+            address: '3/370 Townsend Street, Albury, NSW 2640, Australia',
             phone: '+94777351292',
             phoneDisplay: '+94 77 735 1292',
             email: 'iamarasinghe96@gmail.com',
@@ -284,7 +284,7 @@
             linkedinUrl: 'https://linkedin.com/in/your-profile',
             
             // Contact Card Information
-            company: 'Job applicant'
+            company: 'Job Applicant'
         };
 
         // ========================================
@@ -292,37 +292,29 @@
         // ========================================
         
         function sendEmail() {
-            const subject = 'Opportunity with [Your Company]';
+            const subject = 'Following up on opportunities';
             const mailtoLink = `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}`;
             window.location.href = mailtoLink;
         }
 
         function saveContactCard() {
-            // Generate vCard format
-            const vCard = [
-                'BEGIN:VCARD',
-                'VERSION:3.0',
-                `FN:${CONFIG.name}`,
-                `N:${CONFIG.name.split(' ').reverse().join(';')};;;`,
-                `TEL;TYPE=CELL:${CONFIG.phone}`,
-                `EMAIL:${CONFIG.email}`,
-                `ORG:${CONFIG.company}`,
-                `ADR:;;${CONFIG.address};;;;`,
-                'END:VCARD'
-            ].join('\n');
-
-            // Create downloadable vCard file
-            const blob = new Blob([vCard], { type: 'text/vcard' });
-            const url = window.URL.createObjectURL(blob);
+            // Use the specific vCard format provided
+            const vCard = `BEGIN:VCARD
+VERSION:3.0
+N:Amarasinghe;Indika
+FN:Indika Amarasinghe
+ORG:Job Applicant
+ADR:;;3/370 Townsend Street;Albury;NSW;2640;Australia
+TEL;WORK;VOICE:
+TEL;CELL:+94777351292
+TEL;FAX:
+EMAIL;WORK;INTERNET:iamarasinghe96@gmail.com
+URL:
+END:VCARD`;
             
-            // Create temporary download link
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `${CONFIG.name.replace(/\s+/g, '_')}_contact.vcf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
+            // Create data URL and open it
+            const dataUrl = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vCard);
+            window.open(dataUrl, '_blank');
         }
 
         // Initialize page with configuration data
