@@ -5,7 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Load Tailwind CSS for Modal/Toast styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Tailwind config to ensure Inter font is used and custom colors are available for the new components
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        // Custom colors matching the gradient primary/secondary idea
+                        'primary-blue': '#3b82f6',
+                        'secondary-green': '#10b981',
+                        'tertiary-indigo': '#4f46e5', // New color for secondary card action
+                        'booking-teal': '#0d9488', // New color for Book Appointment
+                    }
+                }
+            }
+        }
+    </script>
     <style>
+        /* Existing custom CSS */
         * {
             margin: 0;
             padding: 0;
@@ -35,10 +57,14 @@
         }
 
         .header {
+            /* Restored the one-line appearance for the name */
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 40px 30px;
             text-align: center;
+            white-space: nowrap; /* Ensures Indika Amarasinghe is on one line */
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .name {
@@ -67,12 +93,26 @@
             margin-bottom: 15px;
             color: #374151;
         }
-
+        
+        /* New custom styles for clickable contact items */
         .contact-item {
             display: flex;
             align-items: center;
             margin-bottom: 12px;
             padding: 8px 0;
+            transition: background-color 0.15s ease;
+            position: relative;
+        }
+
+        .contact-item.interactive {
+            cursor: pointer;
+            padding: 8px 10px;
+            margin: 0 -10px 12px; 
+            border-radius: 8px;
+        }
+
+        .contact-item.interactive:hover {
+            background-color: #f0f4ff; /* Light blue on hover */
         }
 
         .contact-item svg {
@@ -81,38 +121,75 @@
             margin-right: 12px;
             fill: #6b7280;
         }
-
-        .contact-item a {
+        
+        .contact-item.interactive:hover svg {
+            fill: #2563eb; /* Blue on hover */
+        }
+        
+        .contact-item a, .contact-item span {
             text-decoration: none;
             color: #374151;
             transition: color 0.3s ease;
+            flex-grow: 1;
         }
 
-        .contact-item a:hover {
-            color: #2563eb;
+        /* Modal and Toast specific CSS (using Tailwind structure) */
+        .toast {
+            /* Toast positioning: fixed at bottom center */
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            
+            /* Animation properties */
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 0;
+            z-index: 100;
+            
+            /* Initial state for bottom-up animation */
+            transform: translate(-50%, 20px); 
         }
+        
+        .toast.show {
+            opacity: 1;
+            /* Target state: centered and visible */
+            transform: translate(-50%, 0); 
+        }
+        /* Simplified modal styling */
+        .simple-modal-content {
+            padding-top: 20px;
+        }
+        .simple-modal-title {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
 
         .buttons-section {
             display: grid;
-            grid-template-columns: 1fr;
+            /* 2 columns by default for mobile/small screens */
+            grid-template-columns: 1fr 1fr; 
             gap: 15px;
             margin-bottom: 30px;
         }
-
+        
         .action-button {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 15px 20px;
+            padding: 15px 12px; /* Adjusted padding for smaller buttons in the grid */
             border: none;
             border-radius: 12px;
-            font-size: 1rem;
+            font-size: 0.9rem; /* Slightly smaller font for tight grid */
             font-weight: 600;
             text-decoration: none;
             color: white;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            line-height: 1.2;
         }
 
         .action-button:hover {
@@ -123,28 +200,46 @@
         .action-button svg {
             width: 20px;
             height: 20px;
-            margin-right: 10px;
+            margin-right: 5px; /* Reduced margin for tight space */
             fill: currentColor;
         }
 
-        .call-btn {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        /* --- Custom Button Styles --- */
+        .vcf-download-btn {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); /* Primary Blue */
         }
 
-        .call-btn:hover {
+        .vcf-download-btn:hover {
             background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
         }
 
+        .vcard-copy-btn {
+            background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%); /* Indigo/Purple - Split 2 */
+        }
+
+        .vcard-copy-btn:hover {
+            background: linear-gradient(135deg, #3730a3 0%, #4f46e5 100%);
+        }
+
         .cv-btn {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%); /* Secondary Green - Download CV */
         }
 
         .cv-btn:hover {
             background: linear-gradient(135deg, #047857 0%, #059669 100%);
         }
+        
+        .book-btn {
+            background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%); /* Teal/Booking Color */
+        }
+
+        .book-btn:hover {
+            background: linear-gradient(135deg, #0e7467 0%, #0d9488 100%);
+        }
+
 
         .email-btn {
-            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%); /* Orange/Email */
         }
 
         .email-btn:hover {
@@ -152,20 +247,14 @@
         }
 
         .linkedin-btn {
-            background: linear-gradient(135deg, #0077b5 0%, #0e76a8 100%);
+            background: linear-gradient(135deg, #0077b5 0%, #0e76a8 100%); /* LinkedIn Blue */
         }
 
         .linkedin-btn:hover {
             background: linear-gradient(135deg, #005885 0%, #0077b5 100%);
         }
 
-        .appointment-btn {
-            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
-        }
-
-        .appointment-btn:hover {
-            background: linear-gradient(135deg, #6d28d9 0%, #9333ea 100%);
-        }
+        /* --- End Custom Button Styles --- */
 
         .footer {
             text-align: center;
@@ -175,36 +264,18 @@
             background: rgba(243, 244, 246, 0.5);
         }
 
-        @media (min-width: 768px) {
+        /* Tablet/Desktop: Allow for a more condensed grid on wider screens */
+        @media (min-width: 640px) {
             .buttons-section {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(3, 1fr); /* 3 columns for tablet/desktop */
             }
-            
-            .appointment-btn {
-                grid-column: 1 / -1; /* Span across both columns */
+            .action-button {
+                font-size: 1rem;
+                padding: 15px 20px; 
+                margin-right: 0px; /* Resetting margin */
             }
-            
-            .container {
-                max-width: 600px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                margin: 10px 0;
-                border-radius: 12px;
-            }
-            
-            .header {
-                padding: 30px 20px;
-            }
-            
-            .name {
-                font-size: 1.8rem;
-            }
-            
-            .content {
-                padding: 20px;
+            .action-button svg {
+                margin-right: 10px;
             }
         }
     </style>
@@ -213,69 +284,86 @@
     <div class="container">
         <div class="header">
             <h1 class="name">Loading...</h1>
-            <p class="tagline">Loading...</p>
+            <p class="tagline">Loading... </p>
         </div>
         
         <div class="content">
             <div class="contact-section">
                 <h2 class="section-title">Contact Information</h2>
                 
-                <div class="contact-item">
+                <!-- ADDRESS BLOCK (Interactive) -->
+                <div id="address-block" class="contact-item interactive" data-content="3/370 Townsend Street, Albury, NSW 2640">
                     <svg viewBox="0 0 24 24">
                         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                     </svg>
-                    <span>Loading...</span>
+                    <span id="address-text">Loading...</span>
                 </div>
                 
-                <div class="contact-item">
+                <!-- PHONE BLOCK (Interactive - New location for Bonus Actions) -->
+                <div id="phone-block" class="contact-item interactive" onclick="triggerSpecialActions(); return false;">
                     <svg viewBox="0 0 24 24">
                         <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
                     </svg>
-                    <a href="#">Loading...</a>
+                    <a id="phone-link" href="#">Loading...</a>
+                    <!-- Removed the onclick on the anchor tag to allow the parent div to handle the modal -->
                 </div>
                 
-                <div class="contact-item">
+                <!-- EMAIL BLOCK (Interactive) -->
+                <div id="email-block" class="contact-item interactive" data-content="iamarasinghe96@gmail.com">
                     <svg viewBox="0 0 24 24">
                         <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
                     </svg>
-                    <a href="#">Loading...</a>
+                    <span id="email-text">Loading...</span>
                 </div>
             </div>
             
             <div class="buttons-section">
-                <a href="#" onclick="saveContactCard(); return false;" class="action-button call-btn">
+                <!-- 1. SPLIT: Download VCF (Blue) -->
+                <a href="#" onclick="downloadVCF(); return false;" class="action-button vcf-download-btn">
                     <svg viewBox="0 0 24 24">
                         <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M12,12L16,16H13.5V19H10.5V16H8L12,12Z"/>
                     </svg>
-                    Save Contact Card
+                    Download VCF
+                </a>
+
+                <!-- 2. SPLIT: Copy vCard Text (Indigo) -->
+                <a href="#" onclick="copyVCardText(); return false;" class="action-button vcard-copy-btn">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3H19M11,7V9H17V7H11M11,11V13H17V11H11M11,15V17H17V15H11M7,7V9H9V7H7M7,11V13H9V11H7M7,15V17H9V15H7Z"/>
+                    </svg>
+                    Copy Card Text
                 </a>
                 
-                <a href="#" target="_blank" class="action-button cv-btn">
+                <!-- 3. Download CV (Green) -->
+                <a href="#" target="_blank" class="action-button cv-btn" id="cv-link">
                     <svg viewBox="0 0 24 24">
                         <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
                     </svg>
                     Download CV
                 </a>
                 
-                <a href="#" class="action-button email-btn" onclick="sendEmail()">
+                <!-- 4. NEW: Book Appointment (Teal/Secondary Green) -->
+                <a href="#" onclick="bookAppointment(); return false;" class="action-button book-btn" id="book-appointment-link">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 19H5V8h14m-3.83-2H7.83a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8.34a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2M12 2a2 2 0 0 0-2 2v1h4V4a2 2 0 0 0-2-2M7 5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v2H7V5m5 10a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1h2Z"/>
+                    </svg>
+                    Book Appointment
+                </a>
+                
+                <!-- 5. Send Email (Orange) -->
+                <a href="#" class="action-button email-btn" id="main-email-button">
                     <svg viewBox="0 0 24 24">
                         <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
                     </svg>
                     Send Email
                 </a>
                 
-                <a href="#" target="_blank" class="action-button linkedin-btn">
+                <!-- 6. View LinkedIn (LinkedIn Blue) -->
+                <a href="#" target="_blank" class="action-button linkedin-btn" id="linkedin-link">
                     <svg viewBox="0 0 24 24">
                         <path d="M19 3A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19M18.5 18.5V13.2A3.26 3.26 0 0 0 15.24 9.94C14.39 9.94 13.4 10.46 12.92 11.24V10.13H10.13V18.5H12.92V13.57C12.92 12.8 13.54 12.17 14.31 12.17A1.4 1.4 0 0 1 15.71 13.57V18.5H18.5M6.88 8.56A1.68 1.68 0 0 0 8.56 6.88C8.56 5.95 7.81 5.19 6.88 5.19A1.69 1.69 0 0 0 5.19 6.88C5.19 7.81 5.95 8.56 6.88 8.56M8.27 18.5V10.13H5.5V18.5H8.27Z"/>
                     </svg>
                     View LinkedIn
-                </a>
-                
-                <a href="#" onclick="bookAppointment(); return false;" class="action-button appointment-btn">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z"/>
-                    </svg>
-                    Book Appointment
                 </a>
             </div>
         </div>
@@ -285,6 +373,27 @@
         <p>&copy; 2025 Loading...</p>
     </div>
 
+    <!-- Custom Action Modal (Context Menu) -->
+    <div id="action-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-xl p-6 w-full max-w-xs shadow-2xl transform transition-all duration-300 scale-95 opacity-0 simple-modal-content" id="modal-content">
+            <!-- Title element is now hidden by default (passed as empty string) -->
+            <h3 class="font-semibold text-gray-800 simple-modal-title hidden" id="modal-title"></h3>
+
+            <div id="modal-buttons" class="space-y-3">
+                <!-- Action buttons will be injected here -->
+            </div>
+
+            <button id="close-modal" class="mt-6 w-full py-2.5 px-4 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition">
+                Cancel
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notification for Copy Success -->
+    <div id="toast-message" class="toast fixed p-3 bg-gray-800 text-white text-sm font-medium rounded-lg shadow-lg">
+        Text copied to clipboard!
+    </div>
+
     <script>
         // ========================================
         // CONFIGURATION - EDIT THESE VALUES EASILY
@@ -292,8 +401,8 @@
         const CONFIG = {
             // Personal Information
             name: 'Indika Amarasinghe',
-            tagline: 'Project Manager | Technology Enthusiast',
-            address: 'Colombo, Sri Lanka',
+            tagline: 'Project Manager | Technology Enthusiast', // <-- Updated per request
+            address: '3/370 Townsend Street, Albury, NSW 2640',
             phone: '+94777351292',
             phoneDisplay: '+94 77 735 1292',
             email: 'iamarasinghe96@gmail.com',
@@ -301,65 +410,225 @@
             // Links (replace with your actual URLs)
             cvUrl: 'https://1drv.ms/b/c/31e7918ffb397b8d/EQil7oHmOIJGmKteLvx3uRMB0i-EVczYFCR__xWTLmzUJg?download=1',
             linkedinUrl: 'https://www.linkedin.com/in/indika96/',
+            bookAppointmentUrl: 'https://calendly.com/your-booking-link', // <-- Placeholder for booking
+            
+            // --- BONUS CONFIGURATION ---
+            sourceCodeUrl: 'https://github.com/your-repo/this-project', // <--- REPLACE THIS LINK
+            explainerVideoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', // <--- REPLACE THIS LINK
+            challengeEmailSubject: 'Challenge Accepted: My Technical Query for Indika',
             
             // Contact Card Information
             company: 'Job Applicant',
+            title: 'Project Manager',
             vcfFile: 'indika_amarasinghe_contact.vcf'
         };
 
+        // Simplified email body for the recruiter
+        const SIMPLE_RECRUITER_EMAIL_BODY = 'Hello Indika,\n\nI’m reaching out from [Company Name] regarding potential opportunities. Please contact me at [Your Phone Number] or reply here.\n\nBest,\n[Your Name]';
+        
+        // Simplified email body for the Challenge Me button (Recruiter is asking for a solution)
+        const CHALLENGE_EMAIL_BODY = 'Hello Indika,\n\nWe want to challenge you on a technical problem:\n\n[Insert challenge/question here, e.g., "Describe a high-level solution for scaling a database with 10 million daily active users."]\n\nReply with your solution or approach.\n\nBest regards,\n[Your Name]';
+
+
         // ========================================
-        // FUNCTIONALITY
+        // MODAL AND TOAST UTILITIES
+        // ========================================
+        const addressBlock = document.getElementById('address-block');
+        const phoneBlock = document.getElementById('phone-block');
+        const emailBlock = document.getElementById('email-block');
+        const actionModal = document.getElementById('action-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalTitle = document.getElementById('modal-title');
+        const modalButtons = document.getElementById('modal-buttons');
+        const closeModalButton = document.getElementById('close-modal');
+        const toastMessage = document.getElementById('toast-message');
+
+        /**
+         * Safely copies text to the clipboard and shows a toast notification.
+         * @param {string} text The text content to copy.
+         */
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            tempInput.style.position = 'fixed'; // Avoid scrolling
+            document.body.appendChild(tempInput);
+            tempInput.focus();
+            tempInput.select();
+            try {
+                // document.execCommand('copy') is used for broader compatibility in sandboxed environments
+                document.execCommand('copy');
+                showToast('Copied successfully!');
+            } catch (err) {
+                console.error('Copy failed: ', err);
+                showToast('Copy failed.');
+            }
+            document.body.removeChild(tempInput);
+            hideModal();
+        }
+
+        /**
+         * Shows a temporary toast notification.
+         * @param {string} message The message to display.
+         */
+        function showToast(message) {
+            toastMessage.textContent = message;
+            // The transform property in CSS will handle the slide up
+            toastMessage.classList.add('show');
+            setTimeout(() => {
+                // To animate down, remove 'show'
+                toastMessage.classList.remove('show');
+            }, 2500);
+        }
+
+        /**
+         * Shows the action modal with an optional title and button set.
+         * The title is now hidden if an empty string is passed.
+         * @param {string} title The title for the modal (optional).
+         * @param {string} buttonsHTML The HTML string for the action buttons.
+         */
+        function showModal(title, buttonsHTML) {
+            if (title) {
+                modalTitle.textContent = title;
+                modalTitle.classList.remove('hidden');
+            } else {
+                modalTitle.textContent = '';
+                modalTitle.classList.add('hidden'); // Hide the element if no title
+            }
+            
+            modalButtons.innerHTML = buttonsHTML;
+            actionModal.classList.remove('hidden');
+            // Animate in the modal content
+            setTimeout(() => {
+                modalContent.classList.remove('opacity-0', 'scale-95');
+            }, 10);
+        }
+
+        function hideModal() {
+            // Animate out the modal content
+            modalContent.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                actionModal.classList.add('hidden');
+            }, 300); // Wait for animation to finish
+        }
+
+        closeModalButton.addEventListener('click', hideModal);
+        actionModal.addEventListener('click', (e) => {
+            if (e.target === actionModal) {
+                hideModal(); // Close if clicking outside the modal content
+            }
+        });
+
+
+        // ========================================
+        // INTERACTIVE HANDLERS
+        // ========================================
+
+        // --- Address Handler (Triggers Modal) ---
+        addressBlock.addEventListener('click', (e) => {
+            const address = addressBlock.getAttribute('data-content');
+            
+            // Google Maps link
+            const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+            
+            const buttons = `
+                <button onclick="copyToClipboard('${address.replace(/'/g, "\\'")}')" 
+                        class="w-full py-3 px-4 bg-primary-blue text-white font-bold rounded-lg hover:bg-blue-600 transition shadow-md">
+                    Copy Address
+                </button>
+                <a href="${mapUrl}" target="_blank" onclick="hideModal()"
+                   class="w-full py-3 px-4 bg-secondary-green text-white text-center font-bold rounded-lg hover:bg-green-600 transition shadow-md inline-block">
+                    Open in Google Maps
+                </a>
+            `;
+
+            showModal('', buttons);
+        });
+        
+        // --- Phone Handler (New location for Bonus Actions) ---
+        function triggerSpecialActions() {
+            const buttons = `
+                <a href="${CONFIG.sourceCodeUrl}" target="_blank" onclick="hideModal()"
+                   class="w-full py-3 px-4 bg-primary-blue text-white text-center font-bold rounded-lg hover:bg-blue-600 transition shadow-md inline-block">
+                    View Project Files
+                </a>
+                <a href="${CONFIG.explainerVideoUrl}" target="_blank" onclick="hideModal()"
+                   class="w-full py-3 px-4 bg-secondary-green text-white text-center font-bold rounded-lg hover:bg-green-600 transition shadow-md inline-block">
+                    About me
+                </a>
+                <a href="mailto:${CONFIG.email}?subject=${encodeURIComponent(CONFIG.challengeEmailSubject)}&body=${encodeURIComponent(CHALLENGE_EMAIL_BODY)}" target="_blank" onclick="hideModal()"
+                   class="w-full py-3 px-4 bg-red-600 text-white text-center font-bold rounded-lg hover:bg-red-700 transition shadow-md inline-block">
+                    Challenge Me
+                </a>
+            `;
+            // Note: The phone block's interactive class already makes it look clickable.
+            showModal('', buttons); 
+            return false;
+        }
+
+        // --- Email Modal Function (for clickable email text) ---
+        function showEmailOptionsModal(e) {
+            e.preventDefault(); 
+            const email = CONFIG.email;
+            
+            // Mailto link generation using the simplified body
+            const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent('Following up on opportunities')}&body=${encodeURIComponent(SIMPLE_RECRUITER_EMAIL_BODY)}`;
+
+            const buttons = `
+                <button onclick="copyToClipboard('${email}')" 
+                        class="w-full py-3 px-4 bg-primary-blue text-white font-bold rounded-lg hover:bg-blue-600 transition shadow-md">
+                    Copy Email Address
+                </button>
+                <a href="${mailtoUrl}" target="_blank" onclick="hideModal()"
+                   class="w-full py-3 px-4 bg-secondary-green text-white text-center font-bold rounded-lg hover:bg-green-600 transition shadow-md inline-block">
+                    Send Pre-written Email
+                </a>
+            `;
+
+            showModal('', buttons);
+            return false;
+        }
+        
+        // --- Email Clickable Text Handler ---
+        emailBlock.addEventListener('click', (e) => {
+            showEmailOptionsModal(e);
+        });
+
+        // ========================================
+        // ACTION BUTTONS HANDLERS (Modified)
         // ========================================
         
-        function sendEmail() {
-            const subject = 'Following up on opportunities';
-            const mailtoLink = `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}`;
-            window.location.href = mailtoLink;
-        }
-
-        function saveContactCard() {
-            // Link directly to the hosted .vcf file for better mobile compatibility
+        // --- 1. Download VCF (Split Action 1) ---
+        function downloadVCF() {
             window.location.href = CONFIG.vcfFile;
+            // Optionally: showToast('VCF download initiated...');
+        }
+        
+        // --- 2. Copy vCard Text (Split Action 2) ---
+        function copyVCardText() {
+            const vCard = [
+                'BEGIN:VCARD',
+                'VERSION:3.0',
+                `N:${CONFIG.name.split(' ')[1]};${CONFIG.name.split(' ')[0]}`,
+                `FN:${CONFIG.name}`,
+                `TITLE:${CONFIG.title}`,
+                `ORG:${CONFIG.company}`,
+                `TEL;TYPE=WORK,VOICE:${CONFIG.phone}`,
+                `ADR;TYPE=WORK:;;${CONFIG.address}`,
+                `EMAIL;TYPE=PREF,INTERNET:${CONFIG.email}`,
+                `URL:${CONFIG.linkedinUrl}`,
+                'END:VCARD'
+            ].join('\n');
+            
+            copyToClipboard(vCard);
         }
 
+        // --- 4. Book Appointment (New Function) ---
         function bookAppointment() {
-            // Create calendar event in ICS format
-            const now = new Date();
-            const startDate = new Date(now.getTime() + (24 * 60 * 60 * 1000)); // Tomorrow
-            const endDate = new Date(startDate.getTime() + (30 * 60 * 1000)); // 30 minutes later
-            
-            // Format dates for ICS (YYYYMMDDTHHMMSSZ)
-            const formatDate = (date) => {
-                return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-            };
-            
-            const icsContent = [
-                'BEGIN:VCALENDAR',
-                'VERSION:2.0',
-                'PRODID:-//Indika Amarasinghe//Portfolio//EN',
-                'BEGIN:VEVENT',
-                `DTSTART:${formatDate(startDate)}`,
-                `DTEND:${formatDate(endDate)}`,
-                'SUMMARY:Connect with Indika (Job applicant)',
-                `DESCRIPTION:Call with Indika Amarasinghe\\nPhone: ${CONFIG.phone}\\nEmail: ${CONFIG.email}`,
-                `ORGANIZER:mailto:${CONFIG.email}`,
-                'STATUS:TENTATIVE',
-                'TRANSP:OPAQUE',
-                'END:VEVENT',
-                'END:VCALENDAR'
-            ].join('\r\n');
-            
-            // Create download link for ICS file
-            const blob = new Blob([icsContent], { type: 'text/calendar' });
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'meeting_with_indika.ics';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
+            // Open the scheduling link in a new tab
+            window.open(CONFIG.bookAppointmentUrl, '_blank');
+            // Optionally: showToast('Opening booking link...');
         }
+
 
         // Initialize page with configuration data
         document.addEventListener('DOMContentLoaded', function() {
@@ -371,30 +640,36 @@
             document.querySelector('.tagline').textContent = CONFIG.tagline;
             
             // Update contact information
-            const contactItems = document.querySelectorAll('.contact-item');
-            contactItems[0].querySelector('span').textContent = CONFIG.address;
-            contactItems[1].querySelector('a').textContent = CONFIG.phoneDisplay;
-            contactItems[1].querySelector('a').href = `tel:${CONFIG.phone}`;
-            contactItems[2].querySelector('a').textContent = CONFIG.email;
-            contactItems[2].querySelector('a').href = `mailto:${CONFIG.email}`;
+            document.getElementById('address-text').textContent = CONFIG.address;
             
-            // Update buttons
-            document.querySelector('.cv-btn').href = CONFIG.cvUrl;
-            document.querySelector('.linkedin-btn').href = CONFIG.linkedinUrl;
+            const phoneLink = document.getElementById('phone-link');
+            phoneLink.textContent = CONFIG.phoneDisplay;
+            phoneLink.href = `tel:${CONFIG.phone}`;
+
+            document.getElementById('email-text').textContent = CONFIG.email;
             
-            // Update footer
-            document.querySelector('.footer p').textContent = `© 2025 ${CONFIG.name}. All rights reserved.`;
+            // Update links for non-interactive buttons
+            document.getElementById('cv-link').href = CONFIG.cvUrl;
+            document.getElementById('linkedin-link').href = CONFIG.linkedinUrl;
             
-            // Add click animation to buttons
+            // --- Set up the main Send Email button (Direct Mailto) ---
+            const mainEmailButton = document.getElementById('main-email-button');
+            mainEmailButton.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent('Following up on opportunities')}&body=${encodeURIComponent(SIMPLE_RECRUITER_EMAIL_BODY)}`;
+            mainEmailButton.setAttribute('target', '_blank');
+
+            // Add click animation to all buttons
             const buttons = document.querySelectorAll('.action-button');
             buttons.forEach(button => {
                 button.addEventListener('click', function(e) {
                     this.style.transform = 'scale(0.98)';
                     setTimeout(() => {
-                        this.style.transform = '';
+                        this.style.transform = 'translateY(0)'; // Reset translation animation
                     }, 150);
                 });
             });
+
+            // Update footer
+            document.querySelector('.footer p').textContent = `© 2025 ${CONFIG.name}. All rights reserved.`;
         });
     </script>
 </body>
