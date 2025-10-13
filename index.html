@@ -281,29 +281,69 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%) translateY(100px);
-            background: linear-gradient(135deg, #033f57 0%, #1f2937 100%);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
-            padding: 16px 24px;
-            border-radius: 12px;
+            padding: 20px;
+            border-radius: 50%;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-weight: 500;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
             z-index: 2000;
             opacity: 0;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .toast.show {
             opacity: 1;
-            transform: translateX(-50%) translateY(0);
+            transform: translateX(-50%) translateY(0) scale(1);
         }
 
-        .toast svg {
-            width: 20px;
-            height: 20px;
-            fill: white;
+        .toast-checkmark {
+            width: 50px;
+            height: 50px;
+        }
+
+        .toast-checkmark-circle {
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            animation: none;
+        }
+
+        .toast.show .toast-checkmark-circle {
+            animation: drawCircle 0.4s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .toast-checkmark-check {
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            animation: none;
+        }
+
+        .toast.show .toast-checkmark-check {
+            animation: drawCheck 0.3s 0.4s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        @keyframes drawCircle {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes drawCheck {
+            to {
+                stroke-dashoffset: 0;
+            }
         }
 
         @keyframes fadeIn {
@@ -453,10 +493,10 @@
     </div>
 
     <div class="toast" id="toast">
-        <svg viewBox="0 0 24 24">
-            <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/>
+        <svg class="toast-checkmark" viewBox="0 0 52 52">
+            <circle class="toast-checkmark-circle" cx="26" cy="26" r="25"/>
+            <path class="toast-checkmark-check" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
         </svg>
-        <span id="toastMessage">Copied!</span>
     </div>
 
     <script>
@@ -532,7 +572,7 @@
                 {
                     text: 'Copy Number',
                     icon: '<svg viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"/></svg>',
-                    action: () => copyToClipboard(CONFIG.phone, 'Phone number copied!')
+                    action: () => copyToClipboard(CONFIG.phone)
                 },
                 {
                     text: 'Call Number',
@@ -553,7 +593,7 @@
                 {
                     text: 'Copy Email',
                     icon: '<svg viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"/></svg>',
-                    action: () => copyToClipboard(CONFIG.email, 'Email copied!')
+                    action: () => copyToClipboard(CONFIG.email)
                 },
                 {
                     text: 'Send Email',
@@ -574,7 +614,7 @@
                 {
                     text: 'Copy Address',
                     icon: '<svg viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"/></svg>',
-                    action: () => copyToClipboard(CONFIG.address, 'Address copied!')
+                    action: () => copyToClipboard(CONFIG.address)
                 },
                 {
                     text: 'Open in Maps',
@@ -622,36 +662,37 @@
         
         let toastTimeout = null;
         
-        function showToast(message) {
+        function showToast() {
             const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
             
             if (toastTimeout) {
                 clearTimeout(toastTimeout);
+                toast.classList.remove('show');
             }
             
-            toastMessage.textContent = message;
-            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
             
             toastTimeout = setTimeout(() => {
                 toast.classList.remove('show');
                 toastTimeout = null;
-            }, 1000);
+            }, 2000);
         }
         
-        function copyToClipboard(text, message) {
+        function copyToClipboard(text) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(text).then(() => {
-                    showToast(message || 'Copied to clipboard!');
+                    showToast();
                 }).catch(() => {
-                    fallbackCopy(text, message);
+                    fallbackCopy(text);
                 });
             } else {
-                fallbackCopy(text, message);
+                fallbackCopy(text);
             }
         }
         
-        function fallbackCopy(text, message) {
+        function fallbackCopy(text) {
             const textarea = document.createElement('textarea');
             textarea.value = text;
             textarea.style.position = 'fixed';
@@ -660,9 +701,9 @@
             textarea.select();
             try {
                 document.execCommand('copy');
-                showToast(message || 'Copied to clipboard!');
+                showToast();
             } catch (err) {
-                showToast('Unable to copy. Please try again.');
+                alert('Unable to copy. Please try again.');
             }
             document.body.removeChild(textarea);
         }
